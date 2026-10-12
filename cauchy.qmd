@@ -1,0 +1,223 @@
+---
+title: "Cauchy Analysis"
+format: html
+editor: visual
+---
+
+## What population am I sampling from?
+
+### Population description
+
+Cauchy, with location $0$ and scale $1$. The given characteristic is extremely heavy tails.
+
+### Theoretical mean and standard deviation
+
+The theoretical mean and standard deviation are undefined. The assigned location $0$ and scale $1$ are not a population mean and standard deviation.
+
+### CLT assumptions
+
+We normally are assuming that the observations with a sample are independent and identically distributed.
+
+However, the central limit theorem states that the sample mean will converge into a normal distribution while a cauchy population has no mean so it may be impossible to apply the CLT.
+
+```{r}
+seed <- 9686
+B <- 10000
+set.seed(seed)
+
+population_sample <- rcauchy(B, location = 0, scale = 1)
+
+hist(
+  population_sample,
+  breaks = 40,
+  probability = TRUE,
+  main = "Original population: Cauchy, location = 0, scale = 1",
+  xlab = "Individual observation"
+)
+
+curve(dcauchy(x, location = 0, scale = 1), add = TRUE, col = "red", lwd = 2)
+```
+
+## What did I expect before running the simulation?
+
+My expectation is that it will end not end up distributing normally because there is no mean for the CLT to work.
+
+## Which sample sizes did I investigate, and why?
+
+### Sample sizes
+
+I investigated n = 1, 2, 3, 5, 10, 20, 30, 50, 100, and 1000
+
+We are starting from the lowest possible starting size, which is 1, and seeing how major changes impact it. The gap from 1 to 2 should be more impactful than the gap from 100 to 101, so we start with small increases and then towards the end do bigger ones. 1000 was added as a large number to further prove the impossibility of
+
+### Number of repetitions
+
+I used B = 10,000 repetitions for each sample size.
+
+B is used to represent the amount of repetitions of the Monte Carlo Simulations. 10,000 was chosen not only because it was the example used but also because it's a large number which allows for many means to be represented.
+
+## How did I define “approximately normal”?
+
+A comparison with a theoedretical mean is unavailable for this population. The normalized RMSE also isn't usable as there is no mean. As such we'll be forced to use the vague "does it look like a bell curve," which it likely won't fulfill because without a mean the CLT cannot be applied.
+
+## When was the sampling distribution approximately normal?
+
+It never becomes normal.
+
+## Why did I choose that value?
+
+### Simulation code and results
+
+```{r}
+sample_sizes <- c(1, 2, 3, 5, 10, 20, 30, 50, 100, 1000)
+results <- data.frame()
+
+normal_quartiles <- qnorm(c(0.25, 0.75))
+
+for (n in sample_sizes) {
+  set.seed(seed)
+  means <- replicate(
+    B,
+    mean(rcauchy(n, location = 0, scale = 1))
+  )
+  
+  # Get Q-Q point coordinates without drawing a plot
+  qq_points <- qqnorm(means, plot.it = FALSE)
+  
+  # Reconstruct the reference line drawn by qqline()
+  observed_quartiles <- as.numeric(
+    quantile(means, c(0.25, 0.75))
+  )
+  
+  slope <- diff(observed_quartiles) / diff(normal_quartiles)
+  intercept <- observed_quartiles[1] -
+    slope * normal_quartiles[1]
+  
+  # Measure vertical departures from the line
+  line_values <- intercept + slope * qq_points$x
+  differences <- qq_points$y - line_values
+  
+  qq_rmse <- sqrt(mean(differences^2))
+  normalized_qq_rmse <- qq_rmse / slope
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n = n,
+      simulated_mean = mean(means),
+      simulated_SD_of_means = sd(means),
+      theoretical_SE = NA_real_,
+      QQ_RMSE = qq_rmse,
+      normalized_QQ_RMSE = normalized_qq_rmse
+    )
+  )
+  
+  if (n %in% c(1, 2, 3, 5, 10, 20, 30, 50, 100, 1000)) {
+    hist(
+      means,
+      breaks = 40,
+      probability = TRUE,
+      main = paste("Sample means: n =", n),
+      xlab = "Sample mean",
+      ylab = "Density"
+    )
+        
+    qqnorm(means, main = paste("Normal Q-Q plot: n =", n))
+    qqline(means, col = "red")
+  }
+}
+
+knitr::kable(results, digits = 4)
+```
+
+### Histogram evidence
+
+The histogram retains the same shape as n changes, never becoming any more similar to a normal distribution. At no point does it even vaguely "look like a normal distribution"
+
+### Q-Q plot evidence
+
+Th Q-Q plot isn't usable here as it relies upon a mean which does not exist in the cauchy method.
+
+### Numerical evidence
+
+The cauchy method also has no standard error, displaying as NA and not being usable to assert normality.
+
+### Justification for my selected sample size
+
+At no point is it normal, because it does not have the potential to be normal.
+
+## What surprised me, and what limitations did I observe?
+
+### Surprises
+
+I was surprised that the simulated means and the QQ RMSE's still calculated, even though it shouldn't have been able to without having a mean.
+
+### Limitations
+
+There is some variation seen, mainly in the amount of n values chosen (as there could always be more) and the variation in simulations. Also due to using the Monte Carlo variation the seeds will change the results. A different definition of normal may have made it possible, but it's unlikely given that without a mean it falls outside the criteria for the central limit theorem.
+
+## What happened when I used a different seed?
+
+Nothing changes, which is expected as it's inability to converge is a quality of the population caused from the lack of a mean.
+
+```{r}
+sample_sizes <- c(1, 2, 3, 5, 10, 20, 30, 50, 100, 1000)
+results <- data.frame()
+
+normal_quartiles <- qnorm(c(0.25, 0.75))
+
+for (n in sample_sizes) {
+  set.seed(0176)
+  means <- replicate(
+    B,
+    mean(rcauchy(n, location = 0, scale = 1))
+  )
+  
+  # Get Q-Q point coordinates without drawing a plot
+  qq_points <- qqnorm(means, plot.it = FALSE)
+  
+  # Reconstruct the reference line drawn by qqline()
+  observed_quartiles <- as.numeric(
+    quantile(means, c(0.25, 0.75))
+  )
+  
+  slope <- diff(observed_quartiles) / diff(normal_quartiles)
+  intercept <- observed_quartiles[1] -
+    slope * normal_quartiles[1]
+  
+  # Measure vertical departures from the line
+  line_values <- intercept + slope * qq_points$x
+  differences <- qq_points$y - line_values
+  
+  qq_rmse <- sqrt(mean(differences^2))
+  normalized_qq_rmse <- qq_rmse / slope
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n = n,
+      simulated_mean = mean(means),
+      simulated_SD_of_means = sd(means),
+      theoretical_SE = NA_real_,
+      QQ_RMSE = qq_rmse,
+      normalized_QQ_RMSE = normalized_qq_rmse
+    )
+  )
+  
+  if (n %in% c(1, 2, 3, 5, 10, 20, 30, 50, 100, 1000)) {
+    hist(
+      means,
+      breaks = 40,
+      probability = TRUE,
+      main = paste("Sample means: n =", n),
+      xlab = "Sample mean",
+      ylab = "Density"
+    )
+        
+    qqnorm(means, main = paste("Normal Q-Q plot: n =", n))
+    qqline(means, col = "red")
+  }
+}
+
+knitr::kable(results, digits = 4)
+```

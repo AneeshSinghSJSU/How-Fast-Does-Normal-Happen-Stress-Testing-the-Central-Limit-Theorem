@@ -1,0 +1,251 @@
+---
+title: "Small Binomial Analysis"
+format: html
+editor: visual
+---
+
+## What population am I sampling from?
+
+### Population description
+
+Small binomial, with 5 trials and success probability $p = 0.10$. The given characteristic is highly discrete/skewed.
+
+### Theoretical mean and standard deviation
+
+The theoretical mean is $\mu = 5(0.10) = 0.5$, and the standard deviation is $\sigma = \sqrt{5(0.10)(1 - 0.10)} = \sqrt{0.45}$.
+
+### CLT assumptions
+
+We are assuming that the observations with a sample are independent and identically distributed. There should be a finite variance of $0.45$, a mean of $0.5$, and a standard deviation of $\sqrt{0.45}$.
+
+The original histogram is skewed left. But the idea is that because they are identically distributed and have the same mean and standard deviation that as the sample size increases the 10,000 means gathered will resemble a normal distribution.
+
+```{r}
+seed <- 9686
+B <- 10000
+set.seed(seed)
+
+population_sample <- rbinom(B, size = 5, prob = 0.10)
+
+frequencies <- table(
+  factor(population_sample, levels = 0:5)
+)
+
+bar_positions <- barplot(
+  frequencies / B,
+  main = "Original population: Small binomial, size = 5, p = 0.10",
+  xlab = "Number of successes",
+  ylab = "Relative frequency"
+)
+
+points(
+  bar_positions,
+  dbinom(0:5, size = 5, prob = 0.10),
+  col = "red",
+  pch = 19
+)
+```
+
+## What did I expect before running the simulation?
+
+My expectation is for the simulation to become normal by around n = 50, as with the increases in n the majority should shift towards the middle and create a normal distribution. I don't see the Q-Q plot being a major choke point as much as the means will be.
+
+## Which sample sizes did I investigate, and why?
+
+### Sample sizes
+
+I investigated n = 1, 2, 3, 5, 10, 20, 30, 50, 100, 125, 150, 200, 225, 230, 250, and 300.
+
+We are starting from the lowest possible starting size, which is 1, and seeing how major changes impact it. The gap from 1 to 2 should be more impactful than the gap from 100 to 101, so we start with small increases and then towards the end do bigger ones.
+
+Bigger numbers were needed as the RMSE was not within acceptable bounds when n = 100.
+
+### Number of repetitions
+
+I used B = 10,000 repetitions for each sample size.
+
+B is used to represent the amount of repetitions of the Monte Carlo Simulations. 10,000 was chosen not only because it was the example used but also because it's a large number which allows for many means to be represented.
+
+## How did I define “approximately normal”?
+
+An average mean (the mean of the means in the histogram) which differs from the expected mean (0.5) by less than 0.01 meets my criterion for the center. This is an absolute tolerance, and proximity to the theoretical mean alone does not establish a normal distribution.
+
+For the Q-Q plot, I use a normalized RMSE below 0.05. This is the root mean square of the vertical gaps between the Q-Q points and the reference line, divided by the reference line's slope. It measures departures across all points, including the tails; it does not require every individual gap to be below 0.05.
+
+## When was the sampling distribution approximately normal?
+
+n = 230
+
+I severely underestimated the effect the Q-Q plot would have, as that severely bottlenecked the normality of the population. It was only at n = 230 did the normalized RMSE become within acceptable value.
+
+## Why did I choose that value?
+
+### Simulation code and results
+
+```{r}
+sample_sizes <- c(1, 2, 3, 5, 10, 20, 30, 50, 100, 125, 150, 200, 225, 230, 250, 300)
+results <- data.frame()
+
+normal_quartiles <- qnorm(c(0.25, 0.75))
+
+for (n in sample_sizes) {
+  set.seed(seed)
+  means <- replicate(
+    B,
+    mean(rbinom(n, size = 5, prob = 0.10))
+  )
+  
+  # Get Q-Q point coordinates without drawing a plot
+  qq_points <- qqnorm(means, plot.it = FALSE)
+  
+  # Reconstruct the reference line drawn by qqline()
+  observed_quartiles <- as.numeric(
+    quantile(means, c(0.25, 0.75))
+  )
+  
+  slope <- diff(observed_quartiles) / diff(normal_quartiles)
+  intercept <- observed_quartiles[1] -
+    slope * normal_quartiles[1]
+  
+  # Measure vertical departures from the line
+  line_values <- intercept + slope * qq_points$x
+  differences <- qq_points$y - line_values
+  
+  qq_rmse <- sqrt(mean(differences^2))
+  normalized_qq_rmse <- qq_rmse / slope
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n = n,
+      simulated_mean = mean(means),
+      simulated_SE = sd(means),
+      theoretical_SE = sqrt(5 * 0.10 * (1 - 0.10)) / sqrt(n),
+      QQ_RMSE = qq_rmse,
+      normalized_QQ_RMSE = normalized_qq_rmse
+    )
+  )
+  
+  if (n %in% c(1, 2, 3, 5, 10, 20, 30, 50, 100, 125, 150, 200, 225, 230, 250, 300)) {
+    hist(
+      means,
+      breaks = 40,
+      probability = TRUE,
+      main = paste("Sample means: n =", n),
+      xlab = "Sample mean",
+      ylab = "Density"
+    )
+    
+    curve(
+      dnorm(x, mean = 0.5, sd = sqrt(5 * 0.10 * (1 - 0.10)) / sqrt(n)),
+      add = TRUE,
+      col = "red",
+      lwd = 2
+    )
+    
+    qqnorm(means, main = paste("Normal Q-Q plot: n =", n))
+    qqline(means, col = "red")
+  }
+}
+
+knitr::kable(results, digits = 4)
+```
+
+### Histogram evidence
+
+Visually the histogram at some point alternates between resembling a normal distribution very clearly and having notable outliers such n = 125 where certain values are much more dense than others. Despite that the mean remained at an expected value and it's still believable that without those outliers it would fit cleanly.
+
+### Q-Q plot evidence
+
+The Q-Q plot demonstrates abnormality the clearest, as the points plotted form lines which don't keep up with the expected value shown in red. As n increases those lines become smaller and it's more capable of conforming, but at values such as n = 100 they're still very noticeable. That inability to align with the expected values line is why the normalized RMSE was so high.
+
+### Numerical evidence
+
+The mean of all values of n were within tolerance, and the standard error did not deviate much from what was expected. What really made it struggle to achieve normality was the normalized RMSE which can be seen through the high values they had.
+
+### Justification for my selected sample size
+
+It's not impossible that with a different seed a sample size of 225 or maybe even 220 could work, but with the data gained from the seed used 230 is the only one which meets the criteria for normality.
+
+## What surprised me, and what limitations did I observe?
+
+### Surprises
+
+Besides being shocked at the high n value needed to achieve normality, the stark difference in normalized RMSE scores from 225 and 230, being over 0.01. For reference, the difference between 250 and 300 is less than that. It does make me believe that 225 might be some sort of outlier, or perhaps 230 itself is an outlier. The hope is that the other seed will be able to check that.
+
+### Limitations
+
+There is some variation seen, mainly in the amount of n values chosen (as there could always be more) and the variation in simulations. Likewise with how normality is described by it's proximity to the mean, it's possible for a non-normal distribution to fulfill that. Also due to using the Monte Carlo variation the seeds will change the results.
+
+## What happened when I used a different seed?
+
+Surprisingly, it confirms it further as the gap between 225 and 230 remains. I can't think of a reason why there's such a large gap, and it would require looking deeper into it which is beyond the scope of this experiment.
+
+```{r}
+sample_sizes <- c(1, 2, 3, 5, 10, 20, 30, 50, 100, 125, 150, 200, 225, 230, 250, 300)
+results <- data.frame()
+
+normal_quartiles <- qnorm(c(0.25, 0.75))
+
+for (n in sample_sizes) {
+  set.seed(0176)
+  means <- replicate(
+    B,
+    mean(rbinom(n, size = 5, prob = 0.10))
+  )
+  
+  # Get Q-Q point coordinates without drawing a plot
+  qq_points <- qqnorm(means, plot.it = FALSE)
+  
+  # Reconstruct the reference line drawn by qqline()
+  observed_quartiles <- as.numeric(
+    quantile(means, c(0.25, 0.75))
+  )
+  
+  slope <- diff(observed_quartiles) / diff(normal_quartiles)
+  intercept <- observed_quartiles[1] -
+    slope * normal_quartiles[1]
+  
+  # Measure vertical departures from the line
+  line_values <- intercept + slope * qq_points$x
+  differences <- qq_points$y - line_values
+  
+  qq_rmse <- sqrt(mean(differences^2))
+  normalized_qq_rmse <- qq_rmse / slope
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n = n,
+      simulated_mean = mean(means),
+      simulated_SE = sd(means),
+      theoretical_SE = sqrt(5 * 0.10 * (1 - 0.10)) / sqrt(n),
+      QQ_RMSE = qq_rmse,
+      normalized_QQ_RMSE = normalized_qq_rmse
+    )
+  )
+  
+  if (n %in% c(1, 2, 3, 5, 10, 20, 30, 50, 100, 125, 150, 200, 225, 230, 250, 300)) {
+    hist(
+      means,
+      breaks = 40,
+      probability = TRUE,
+      main = paste("Sample means: n =", n),
+      xlab = "Sample mean",
+      ylab = "Density"
+    )
+    
+    curve(
+      dnorm(x, mean = 0.5, sd = sqrt(5 * 0.10 * (1 - 0.10)) / sqrt(n)),
+      add = TRUE,
+      col = "red",
+      lwd = 2
+    )
+    
+    qqnorm(means, main = paste("Normal Q-Q plot: n =", n))
+    qqline(means, col = "red")
+  }
+}
+
+knitr::kable(results, digits = 4)
+```

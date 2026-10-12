@@ -1,0 +1,238 @@
+---
+title: "Exponential Analysis"
+format: html
+---
+
+## What population am I sampling from?
+
+### Population description
+
+Exponential, with rate $\lambda = 1$. The given characteristic is strong right skew.
+
+### Theoretical mean and standard deviation
+
+The theoretical mean is $\mu = 1 = 1/\lambda$, and the standard deviation is $\sigma = 1 = 1/\lambda$.
+
+### CLT assumptions
+
+We are assuming that the observations with a sample are independent and identically distributed. There should be a finite variance of $1$, a mean of $1$, and a standard deviation of $1$.
+
+The original histogram, as exponential populations tend to be, is skewed left. But the idea is that because they are identically distributed and have the same mean and standard deviation that as the sample size increases the 10,000 means gathered will resemble a normal distribution.
+
+```{r}
+seed <- 9686
+B <- 10000
+set.seed(seed)
+
+population_sample <- rexp(B, rate = 1)
+
+hist(
+  population_sample,
+  breaks = 40,
+  probability = TRUE,
+  main = "Original population: Exponential, rate = 1",
+  xlab = "Individual observation"
+)
+
+curve(dexp(x, rate = 1), add = TRUE, col = "red", lwd = 2)
+```
+
+## What did I expect before running the simulation?
+
+My expectation is for the simulation to become normal by around n = 50, as with the increases in n the majority should shift towards the middle and create a normal distribution. I don't see the Q-Q plot being a major choke point as much as the means will be.
+
+## Which sample sizes did I investigate, and why?
+
+### Sample sizes
+
+I investigated n = 1, 2, 3, 5, 10, 20, 30, 50, 100, 125, 150, and 200.
+
+We are starting from the lowest possible starting size, which is 1, and seeing how major changes impact it. The gap from 1 to 2 should be more impactful than the gap from 100 to 101, so we start with small increases and then towards the end do bigger ones. 125, 150, and 200 were necessary as even as high as 100 it did not become normal.
+
+### Number of repetitions
+
+I used B = 10,000 repetitions for each sample size.
+
+B is used to represent the amount of repetitions of the Monte Carlo Simulations. 10,000 was chosen not only because it was the example used but also because it's a large number which allows for many means to be represented.
+
+## How did I define “approximately normal”?
+
+When looking at the histogram, an average mean (the mean of the means in the histogram) which differs from the expected mean (1) by less 0.01 can be considered normal. While it's not the most precise, I am hoping that if, when converted to a percent (1%) it cannot be represented without using fractions then that means it will be close enough. While this mainly accounts for the center, the normalized RMSE accounts for the tails. Since the tails make up a minority of the data, deviation less than 0.05 can still be considered normal as while it does deviate a fair amount, at this level of deviation the theoretical max any point can deviate is by 5. While that is a lot, it is extremely uncommon as that would mean each other gap has a deviation of 0 units. An average gap of 0.05 is acceptable as it's half of a tenth. It will have to fulfill both to be considered normal.
+
+## When was the sampling distribution approximately normal?
+
+n = 125
+
+My estimation was substantially off as it took over double the n size for it to become normal, as the normalized RMSE would not be within acceptable range.
+
+## Why did I choose that value?
+
+### Simulation code and results
+
+```{r}
+sample_sizes <- c(1, 2, 3, 5, 10, 20, 30, 50, 100, 125, 150, 200)
+results <- data.frame()
+
+normal_quartiles <- qnorm(c(0.25, 0.75))
+
+for (n in sample_sizes) {
+  set.seed(seed)
+  means <- replicate(
+    B,
+    mean(rexp(n, rate = 1))
+  )
+  
+  # Get Q-Q point coordinates without drawing a plot
+  qq_points <- qqnorm(means, plot.it = FALSE)
+  
+  # Reconstruct the reference line drawn by qqline()
+  observed_quartiles <- as.numeric(
+    quantile(means, c(0.25, 0.75))
+  )
+  
+  slope <- diff(observed_quartiles) / diff(normal_quartiles)
+  intercept <- observed_quartiles[1] -
+    slope * normal_quartiles[1]
+  
+  # Measure vertical departures from the line
+  line_values <- intercept + slope * qq_points$x
+  differences <- qq_points$y - line_values
+  
+  qq_rmse <- sqrt(mean(differences^2))
+  normalized_qq_rmse <- qq_rmse / slope
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n = n,
+      simulated_mean = mean(means),
+      simulated_SE = sd(means),
+      theoretical_SE = 1 / sqrt(n),
+      QQ_RMSE = qq_rmse,
+      normalized_QQ_RMSE = normalized_qq_rmse
+    )
+  )
+  
+  if (n %in% c(1, 2, 3, 5, 10, 20, 30, 50, 100, 125, 150, 200)) {
+    hist(
+      means,
+      breaks = 40,
+      probability = TRUE,
+      main = paste("Sample means: n =", n),
+      xlab = "Sample mean",
+      ylab = "Density"
+    )
+    
+    curve(
+      dnorm(x, mean = 1, sd = 1 / sqrt(n)),
+      add = TRUE,
+      col = "red",
+      lwd = 2
+    )
+    
+    qqnorm(means, main = paste("Normal Q-Q plot: n =", n))
+    qqline(means, col = "red")
+  }
+}
+
+knitr::kable(results, digits = 4)
+```
+
+### Histogram evidence
+
+The histogram itself, while it did take a while to fully shift over, did become sufficiently normal rather soon. In fact, even as low as n = 1 it was within 0.008 of the mean which is acceptable. This does prove that using the mean for checking for normality has substantial flaws, as the line to outline a normal distribution does not follow the histogram closely, but it also shows the importance of the Q-Q plot's RMSE as another means to determine normality. Comparing the histograms visually, it's clear to see that at 100 it's still leaning to the left but once it reaches 125 it is hard to notice any leaning.
+
+### Q-Q plot evidence
+
+The Q-Q plot is the clearest case demonstrating the issue with the exponential population. The tails of the line curve away from the expected value substantially which causes high root mean standard errors, to the point where even with the normal answer it's fairly noticeable. However it's also undeniable to say that at n = 125 it's substantially better than earlier values of n in corresponding with the line.
+
+### Numerical evidence
+
+Keeping in mind that the mean must be within a 0.01 tolerance of 1.00, the population did a great job of that. However it was clearly not normally distributed which can be seen through the Q-Q plot's RMSE. The standard error was well within what was expected to, making the RMSE the main check for normality.
+
+### Justification for my selected sample size
+
+n = 125 is the best choice for when it becomes normal as only then does it not only visually look normal in the histogram, but also numerical becomes normal due to finally having a Q-Q RMSE within the bounds of normality.
+
+## What surprised me, and what limitations did I observe?
+
+### Surprises
+
+I was definitely surprised by how long it took for it to reach normality, as I didn't expect it to take such a large sample size for it to shift over. In retrospect my earlier interpretations were definitely naive, as I hadn't considered that the mean would be so close to 1 due to the way exponential populations work, with the few high ones compensating for the many small values.
+
+### Limitations
+
+There is some variation seen, mainly in the amount of n values chosen (as there could always be more) and the variation in simulations. Likewise with how normality is described by it's proximity to the mean, it's possible for a non-normal distribution to fulfill that. Also due to using the Monte Carlo variation the seeds will change the results. Another big limitation was the way means by which we are determining normality, as only the Q-Q plot's normalized RMSE kept it in check. A potential solution would be to use the median and it's proximity to the mean, however that would require a whole new experiment. It is definitely an improvement which could be implemented though.
+
+## What happened when I used a different seed?
+
+The same trend is followed with the new seed, as it too only achieved normality at n = 125 due to the QQ normalized RMSE becoming acceptable only then. This further reinforces the answer achieved earlier as it got the same results.
+
+```{r}
+sample_sizes <- c(1, 2, 3, 5, 10, 20, 30, 50, 100, 125, 150, 200)
+results <- data.frame()
+
+normal_quartiles <- qnorm(c(0.25, 0.75))
+
+for (n in sample_sizes) {
+  set.seed(0176)
+  means <- replicate(
+    B,
+    mean(rexp(n, rate = 1))
+  )
+  
+  # Get Q-Q point coordinates without drawing a plot
+  qq_points <- qqnorm(means, plot.it = FALSE)
+  
+  # Reconstruct the reference line drawn by qqline()
+  observed_quartiles <- as.numeric(
+    quantile(means, c(0.25, 0.75))
+  )
+  
+  slope <- diff(observed_quartiles) / diff(normal_quartiles)
+  intercept <- observed_quartiles[1] -
+    slope * normal_quartiles[1]
+  
+  # Measure vertical departures from the line
+  line_values <- intercept + slope * qq_points$x
+  differences <- qq_points$y - line_values
+  
+  qq_rmse <- sqrt(mean(differences^2))
+  normalized_qq_rmse <- qq_rmse / slope
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n = n,
+      simulated_mean = mean(means),
+      simulated_SE = sd(means),
+      theoretical_SE = 1 / sqrt(n),
+      QQ_RMSE = qq_rmse,
+      normalized_QQ_RMSE = normalized_qq_rmse
+    )
+  )
+  
+  if (n %in% c(1, 2, 3, 5, 10, 20, 30, 50, 100, 125, 150, 200)) {
+    hist(
+      means,
+      breaks = 40,
+      probability = TRUE,
+      main = paste("Sample means: n =", n),
+      xlab = "Sample mean",
+      ylab = "Density"
+    )
+    
+    curve(
+      dnorm(x, mean = 1, sd = 1 / sqrt(n)),
+      add = TRUE,
+      col = "red",
+      lwd = 2
+    )
+    
+    qqnorm(means, main = paste("Normal Q-Q plot: n =", n))
+    qqline(means, col = "red")
+  }
+}
+
+knitr::kable(results, digits = 4)
+```
