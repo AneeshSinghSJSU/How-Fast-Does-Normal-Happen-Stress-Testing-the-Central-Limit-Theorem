@@ -1,0 +1,2726 @@
+CLT DATA SCIENCE PROJECT — AVAILABLE CONVERSATION TRANSCRIPT
+Export prepared: 2026-10-12 (America/Los_Angeles)
+
+IMPORTANT SCOPE NOTE
+This is a partial transcript compiled from the conversation text available to
+this assistant. It contains 46 visible user messages, including nine pasted
+analysis drafts, and five available substantive assistant replies.
+Earlier assistant replies are unavailable and are explicitly marked below;
+they have not been invented or reconstructed.
+
+This is not an official platform export. Message text is transcribed from the
+available history. Line breaks and code-block formatting in pasted drafts
+have been restored for readability. Mathematical/source notation and Markdown
+are retained as plain text. Citation display tags are replaced with readable
+source references. Original uploaded files are included separately in the ZIP.
+
+Assistant progress updates, tool execution logs, and internal instructions are
+not part of this transcript. Historical draft claims have not been corrected
+retroactively. The export ends with the user's request to create this file.
+
+Attachment paths below refer to the attachments/ folder in the accompanying ZIP.
+Original sandbox download links in assistant replies are historical references;
+available related generated files are included in generated-files/.
+
+========================================================================
+EXCHANGE 01
+========================================================================
+
+USER
+
+I need help with my data science project, where do I start?
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 02
+========================================================================
+
+USER
+
+I am using R Studio, how do I create a .qmd file in the folder? How do I make the project folder and stuff?
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 03
+========================================================================
+
+USER
+
+I did the first 3 steps, did I miss anything?
+
+[Attachments: attachments/image(20261008-011501).png]
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 04
+========================================================================
+
+USER
+
+I got this
+
+[Attachments: attachments/image(20261008-012316).png]
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 05
+========================================================================
+
+USER
+
+But what am I observing? It looks like just a normal distribution and I don't understand the Q-Q plot
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 06
+========================================================================
+
+USER
+
+I booted up my project again and it looks like this, what do I do?
+
+[Attachments: attachments/image(20261011-000145).png]
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 07
+========================================================================
+
+USER
+
+Okay so what do I do once I write down what was observed in the analysis I sent in earlier?
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 08
+========================================================================
+
+USER
+
+This is what I got, this is my conclusion. 
+
+As sample size increased both still followed the bell curve and maintained a normal distribution. All followed the Q-Q line. All were close to their theoretical standard error with a max deviation of [unsure please find that for me]. The mean furthest from 0 was when the sample size was 10, but even then it was only 0.0054.
+
+[Attachments: attachments/image(20261011-021538).png]
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 09
+========================================================================
+
+USER
+
+So what do I do next?
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 10
+========================================================================
+
+USER
+
+I feel like we're doing things a bit wrong can we look at Math167R - Class 06 project_1_clt_monte_carlo.html again? Like for example I don't think we broke into the right analisation categories such as the population and the reason for choosing certain values
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 11
+========================================================================
+
+USER
+
+Can you give me like an outline I can paste into normal.qmd which has a section for each question which must be answered
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 12
+========================================================================
+
+USER
+
+Where can I see the original population's shape for the part with the CLT assumption
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 13
+========================================================================
+
+USER
+
+Does the Q-Q plot measure SE?
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 14
+========================================================================
+
+USER
+
+Don't give me a flat "normal enough" standard but how can I get one using the Q-Q graph since currently my metric for the histogram is that the mean is less than 0.01 off from the normal (0)
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 15
+========================================================================
+
+USER
+
+this code plots the line and ideal line on QQ plots
+qqnorm(sample_means) qqline(sample_means)
+can i find a number that computes the difference between these 2 plots?
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 16
+========================================================================
+
+USER
+
+Could you mold it into this?
+
+sample_sizes <- c(1, 2, 3, 5, 10, 20, 30, 50, 100)
+results <- data.frame()
+
+for (n in sample_sizes) {
+  set.seed(seed)
+  means <- replicate(B, mean(rnorm(n)))
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n = n,
+      simulated_mean = mean(means),
+      simulated_SE = sd(means),
+      theoretical_SE = 1 / sqrt(n)
+    )
+  )
+  
+  if (n %in% c(1, 2, 3, 5, 10, 30, 100)) {
+    hist(means, breaks = 40,
+         main = paste("Sample means: n =", n),
+         xlab = "Sample mean")
+    
+    qqnorm(means, main = paste("Normal Q-Q plot: n =", n))
+    qqline(means, col = "red")
+  }
+}
+
+knitr::kable(results, digits = 4)
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 17
+========================================================================
+
+USER
+
+Evaluate the requirements, then look at what is written below and see if it answers all the questions required of the experiment for the normal distribution:
+
+---
+title: "Standard Normal Analysis"
+format: html
+---
+
+## What population am I sampling from?
+
+### Population description
+
+Standard normal. The important characteristics of it is that it's a normal population which means we should expect a normal distribution
+
+### Theoretical mean and standard deviation
+
+We are assuming that the population mean is $\mu = 0$, and its standard deviation is $\sigma = 1$ as that is typical of a normal population.
+
+### CLT assumptions
+
+We are assuming that the observations with a sample are independent.
+
+The original population follows a bell curve with few massive outliers as seen below.
+
+```{r}
+set.seed(9686)
+
+population_sample <- rnorm(10000, mean = 0, sd = 1)
+
+hist(population_sample,
+     breaks = 40,
+     probability = TRUE,
+     main = "Original population: Standard normal",
+     xlab = "Individual observation")
+
+curve(dnorm(x, mean = 0, sd = 1),
+      add = TRUE, col = "red", lwd = 2)
+```
+
+## What did I expect before running the simulation?
+
+Because the population is normal, I expect it to be normally distributed which means for the Q-Q graph to follow the line and to see a bell-curve which will only become more precise as n increases.
+
+## Which sample sizes did I investigate, and why?
+
+### Sample sizes
+
+I investigated n = 1, 2, 3, 5, 10, 20, 30, 50, and 100.
+
+We are starting from the lowest possible starting size, which is 1, and seeing how major changes impact it. The gap from 1 to 2 should be more impactful than the gap from 100 to 101, so we start with small increases and then towards the end do bigger ones.
+
+### Number of repetitions
+
+I used B = 10,000 repetitions for each sample size.
+
+B is used to represent the amount of repetitions of the Monte Carlo Simulations. 10,000 was chosen not only because it was the example used but also because it's a large number which allows for many means to be represented.
+
+## How did I define “approximately normal”?
+
+When looking at the histogram, an average mean which differs from the normal by less than 1% (±0.01) can be considered normal. While it's not the most precise, I am hoping that if the percent cannot be represented without using fractions then that means it will be close enough
+
+## When was the sampling distribution approximately normal?
+
+n = 1
+
+Even with an n of 1, the simulated mean was 0.0013 which is 0.13% away from 0 which is the expected mean.
+
+## Why did I choose that value?
+
+### Simulation code and results
+
+```{r}
+sample_sizes <- c(1, 2, 3, 5, 10, 20, 30, 50, 100)
+results <- data.frame()
+
+normal_quartiles <- qnorm(c(0.25, 0.75))
+
+for (n in sample_sizes) {
+  set.seed(seed)
+  means <- replicate(B, mean(rnorm(n)))
+  
+  # Get Q-Q point coordinates without drawing a plot
+  qq_points <- qqnorm(means, plot.it = FALSE)
+  
+  # Reconstruct the reference line drawn by qqline()
+  observed_quartiles <- as.numeric(
+    quantile(means, c(0.25, 0.75))
+  )
+  
+  slope <- diff(observed_quartiles) / diff(normal_quartiles)
+  intercept <- observed_quartiles[1] -
+    slope * normal_quartiles[1]
+  
+  # Measure vertical departures from the line
+  line_values <- intercept + slope * qq_points$x
+  differences <- qq_points$y - line_values
+  
+  qq_rmse <- sqrt(mean(differences^2))
+  normalized_qq_rmse <- qq_rmse / slope
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n = n,
+      simulated_mean = mean(means),
+      simulated_SE = sd(means),
+      theoretical_SE = 1 / sqrt(n),
+      QQ_RMSE = qq_rmse,
+      normalized_QQ_RMSE = normalized_qq_rmse
+    )
+  )
+  
+  if (n %in% c(1, 2, 3, 5, 10, 30, 100)) {
+    hist(means, breaks = 40,
+         main = paste("Sample means: n =", n),
+         xlab = "Sample mean")
+    
+    qqnorm(means, main = paste("Normal Q-Q plot: n =", n))
+    qqline(means, col = "red")
+  }
+}
+
+knitr::kable(results, digits = 4)
+```
+
+### Histogram evidence
+
+As sample size increased all plotted histograms still followed the bell curve and maintained a normal distribution.
+
+### Q-Q plot evidence
+
+All are close to the Q-Q line, however when you look at the root mean square error between each point on the Q-Q lines you can see that they lower as n increases.
+
+### Numerical evidence
+
+No simulated mean differs more than 0.01 from 0.
+
+The standard errors were close to what was expected, with the greatest being a 0.0047 when n = 2.
+
+### Justification for my selected sample size
+
+With the low mean of n = 1 and the distribution remaining normal afterwards, it's fair to say that it is when it becomes normal.
+
+This is to be expected as averages of independent normal observations are normal
+
+## What surprised me, and what limitations did I observe?
+
+### Surprises
+
+There's nothing especially surprising about the normal population being distributed normally, but n=10 being the biggest outlier is strange
+
+### Limitations
+
+[Discuss random simulation variation, imperfect Q-Q alignment, and any limitations of your chosen normality criteria.]
+
+There is some variation seen, mainly in the amount of n values chosen (as there could always be more) and the variation in simulations as seen with outliers like n = 10. The normality criteria too could be problematic as something like 0.0099 would be considered as normal as 0.0000001.
+
+## What happened when I used a different seed?
+
+With this different seed, the average of the means is actually lower than those with the first seed making it only further support the claims from the first experiment.
+
+```{r}
+sample_sizes <- c(1, 2, 3, 5, 10, 20, 30, 50, 100)
+results <- data.frame()
+
+normal_quartiles <- qnorm(c(0.25, 0.75))
+
+for (n in sample_sizes) {
+  set.seed(0176)
+  means <- replicate(B, mean(rnorm(n)))
+  
+  # Get Q-Q point coordinates without drawing a plot
+  qq_points <- qqnorm(means, plot.it = FALSE)
+  
+  # Reconstruct the reference line drawn by qqline()
+  observed_quartiles <- as.numeric(
+    quantile(means, c(0.25, 0.75))
+  )
+  
+  slope <- diff(observed_quartiles) / diff(normal_quartiles)
+  intercept <- observed_quartiles[1] -
+    slope * normal_quartiles[1]
+  
+  # Measure vertical departures from the line
+  line_values <- intercept + slope * qq_points$x
+  differences <- qq_points$y - line_values
+  
+  qq_rmse <- sqrt(mean(differences^2))
+  normalized_qq_rmse <- qq_rmse / slope
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n = n,
+      simulated_mean = mean(means),
+      simulated_SE = sd(means),
+      theoretical_SE = 1 / sqrt(n),
+      QQ_RMSE = qq_rmse,
+      normalized_QQ_RMSE = normalized_qq_rmse
+    )
+  )
+  
+  if (n %in% c(1, 2, 3, 5, 10, 30, 100)) {
+    hist(means, breaks = 40,
+         main = paste("Sample means: n =", n),
+         xlab = "Sample mean")
+    
+    qqnorm(means, main = paste("Normal Q-Q plot: n =", n))
+    qqline(means, col = "red")
+  }
+}
+
+knitr::kable(results, digits = 4)
+```
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 18
+========================================================================
+
+USER
+
+This is just for the normal population
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 19
+========================================================================
+
+USER
+
+Am I missing anything?
+
+---
+title: "Standard Normal Analysis"
+format: html
+---
+
+## What population am I sampling from?
+
+### Population description
+
+Standard normal. The important characteristics of it is that it's a normal population which means we should expect a normal distribution
+
+### Theoretical mean and standard deviation
+
+We are assuming that the population mean is $\mu = 0$, and its standard deviation is $\sigma = 1$ as that is typical of a normal population.
+
+### CLT assumptions
+
+We are assuming that the observations with a sample are independent.
+
+The original population follows a bell curve with few massive outliers as seen below.
+
+```{r}
+seed = 9686
+B = 10000
+set.seed(seed)
+
+population_sample <- rnorm(10000, mean = 0, sd = 1)
+
+hist(population_sample,
+     breaks = 40,
+     probability = TRUE,
+     main = "Original population: Standard normal",
+     xlab = "Individual observation")
+
+curve(dnorm(x, mean = 0, sd = 1),
+      add = TRUE, col = "red", lwd = 2)
+```
+
+## What did I expect before running the simulation?
+
+Because the population is normal, I expect it to be normally distributed which means for the Q-Q graph to follow the line and to see a bell-curve which will only become more precise as n increases.
+
+## Which sample sizes did I investigate, and why?
+
+### Sample sizes
+
+I investigated n = 1, 2, 3, 5, 10, 20, 30, 50, and 100.
+
+We are starting from the lowest possible starting size, which is 1, and seeing how major changes impact it. The gap from 1 to 2 should be more impactful than the gap from 100 to 101, so we start with small increases and then towards the end do bigger ones.
+
+### Number of repetitions
+
+I used B = 10,000 repetitions for each sample size.
+
+B is used to represent the amount of repetitions of the Monte Carlo Simulations. 10,000 was chosen not only because it was the example used but also because it's a large number which allows for many means to be represented.
+
+## How did I define “approximately normal”?
+
+When looking at the histogram, an average mean which differs from the normal by less than 1% (±0.01) can be considered normal. While it's not the most precise, I am hoping that if the percent cannot be represented without using fractions then that means it will be close enough
+
+## When was the sampling distribution approximately normal?
+
+n = 1
+
+Even with an n of 1, the simulated mean was 0.0013 which is 0.13% away from 0 which is the expected mean.
+
+## Why did I choose that value?
+
+### Simulation code and results
+
+```{r}
+sample_sizes <- c(1, 2, 3, 5, 10, 20, 30, 50, 100)
+results <- data.frame()
+
+normal_quartiles <- qnorm(c(0.25, 0.75))
+
+for (n in sample_sizes) {
+  set.seed(seed)
+  means <- replicate(B, mean(rnorm(n)))
+  
+  # Get Q-Q point coordinates without drawing a plot
+  qq_points <- qqnorm(means, plot.it = FALSE)
+  
+  # Reconstruct the reference line drawn by qqline()
+  observed_quartiles <- as.numeric(
+    quantile(means, c(0.25, 0.75))
+  )
+  
+  slope <- diff(observed_quartiles) / diff(normal_quartiles)
+  intercept <- observed_quartiles[1] -
+    slope * normal_quartiles[1]
+  
+  # Measure vertical departures from the line
+  line_values <- intercept + slope * qq_points$x
+  differences <- qq_points$y - line_values
+  
+  qq_rmse <- sqrt(mean(differences^2))
+  normalized_qq_rmse <- qq_rmse / slope
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n = n,
+      simulated_mean = mean(means),
+      simulated_SE = sd(means),
+      theoretical_SE = 1 / sqrt(n),
+      QQ_RMSE = qq_rmse,
+      normalized_QQ_RMSE = normalized_qq_rmse
+    )
+  )
+  
+  if (n %in% c(1, 2, 3, 5, 10, 30, 100)) {
+    hist(means, breaks = 40,
+         main = paste("Sample means: n =", n),
+         xlab = "Sample mean")
+    
+    qqnorm(means, main = paste("Normal Q-Q plot: n =", n))
+    qqline(means, col = "red")
+  }
+}
+
+knitr::kable(results, digits = 4)
+```
+
+### Histogram evidence
+
+As sample size increased all plotted histograms still followed the bell curve and maintained a normal distribution.
+
+### Q-Q plot evidence
+
+All are close to the Q-Q line, however when you look at the root mean square error between each point on the Q-Q lines you can see that they lower as n increases.
+
+### Numerical evidence
+
+No simulated mean differs more than 0.01 from 0.
+
+The standard errors were close to what was expected, with the greatest being a 0.0047 when n = 2.
+
+### Justification for my selected sample size
+
+With the low mean of n = 1 and the distribution remaining normal afterwards, it's fair to say that it is when it becomes normal.
+
+This is to be expected as averages of independent normal observations are normal
+
+## What surprised me, and what limitations did I observe?
+
+### Surprises
+
+There's nothing especially surprising about the normal population being distributed normally, but n=10 being the biggest outlier is strange
+
+### Limitations
+
+There is some variation seen, mainly in the amount of n values chosen (as there could always be more) and the variation in simulations as seen with outliers like n = 10. The normality criteria too could be problematic as something like 0.0099 would be considered as normal as 0.0000001.
+
+## What happened when I used a different seed?
+
+With this different seed, the average of the means is actually lower than those with the first seed making it only further support the claims from the first experiment.
+
+```{r}
+sample_sizes <- c(1, 2, 3, 5, 10, 20, 30, 50, 100)
+results <- data.frame()
+
+normal_quartiles <- qnorm(c(0.25, 0.75))
+
+for (n in sample_sizes) {
+  set.seed(0176)
+  means <- replicate(B, mean(rnorm(n)))
+  
+  # Get Q-Q point coordinates without drawing a plot
+  qq_points <- qqnorm(means, plot.it = FALSE)
+  
+  # Reconstruct the reference line drawn by qqline()
+  observed_quartiles <- as.numeric(
+    quantile(means, c(0.25, 0.75))
+  )
+  
+  slope <- diff(observed_quartiles) / diff(normal_quartiles)
+  intercept <- observed_quartiles[1] -
+    slope * normal_quartiles[1]
+  
+  # Measure vertical departures from the line
+  line_values <- intercept + slope * qq_points$x
+  differences <- qq_points$y - line_values
+  
+  qq_rmse <- sqrt(mean(differences^2))
+  normalized_qq_rmse <- qq_rmse / slope
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n = n,
+      simulated_mean = mean(means),
+      simulated_SE = sd(means),
+      theoretical_SE = 1 / sqrt(n),
+      QQ_RMSE = qq_rmse,
+      normalized_QQ_RMSE = normalized_qq_rmse
+    )
+  )
+  
+  if (n %in% c(1, 2, 3, 5, 10, 30, 100)) {
+    hist(means, breaks = 40,
+         main = paste("Sample means: n =", n),
+         xlab = "Sample mean")
+    
+    qqnorm(means, main = paste("Normal Q-Q plot: n =", n))
+    qqline(means, col = "red")
+  }
+}
+
+knitr::kable(results, digits = 4)
+```
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 20
+========================================================================
+
+USER
+
+What would a normalised RMSE of 1 imply?
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 21
+========================================================================
+
+USER
+
+Could you plot a Q-Q plot with a normalized RMSE of 1, 0.5, and 0.25 for me to visualize this
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 22
+========================================================================
+
+USER
+
+Can you do one of 0.1 and 0.05 now?
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 23
+========================================================================
+
+USER
+
+What is the difference between the top and bottom most Q-Q point and the reference line for both 0.1 and 0.05
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 24
+========================================================================
+
+USER
+
+What normalised RMSE would need to be present for the difference between any Q-Q point on any line with this RMSE to be less than 0.5
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 25
+========================================================================
+
+USER
+
+What about less than 1
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 26
+========================================================================
+
+USER
+
+If there was a gap one normalized spread unit away does that mean every other gap is 0 units away?
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 27
+========================================================================
+
+USER
+
+If RMSE is 0.05 and each gap is the same amount of units away, how far away is each gap?
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 28
+========================================================================
+
+USER
+
+Check if I am missing anything, remember to review the project guidelines:
+
+---
+title: "Standard Normal Analysis"
+format: html
+---
+
+## What population am I sampling from?
+
+### Population description
+
+Standard normal. The important characteristics of it is that it's a normal population which means we should expect a normal distribution
+
+### Theoretical mean and standard deviation
+
+We are assuming that the population mean is $\mu = 0$, and its standard deviation is $\sigma = 1$ as that is typical of a normal population.
+
+### CLT assumptions
+
+We are assuming that the observations with a sample are independent.
+
+The original population follows a bell curve with few massive outliers as seen below.
+
+```{r}
+seed = 9686
+B = 10000
+set.seed(seed)
+
+population_sample <- rnorm(10000, mean = 0, sd = 1)
+
+hist(population_sample,
+     breaks = 40,
+     probability = TRUE,
+     main = "Original population: Standard normal",
+     xlab = "Individual observation")
+
+curve(dnorm(x, mean = 0, sd = 1),
+      add = TRUE, col = "red", lwd = 2)
+```
+
+## What did I expect before running the simulation?
+
+Because the population is normal, I expect it to be normally distributed even as low as n =1. Which means the Q-Q graph will roughly follow the line and we should see a bell-curve which will only become more precise as n increases.
+
+## Which sample sizes did I investigate, and why?
+
+### Sample sizes
+
+I investigated n = 1, 2, 3, 5, 10, 20, 30, 50, and 100.
+
+We are starting from the lowest possible starting size, which is 1, and seeing how major changes impact it. The gap from 1 to 2 should be more impactful than the gap from 100 to 101, so we start with small increases and then towards the end do bigger ones.
+
+### Number of repetitions
+
+I used B = 10,000 repetitions for each sample size.
+
+B is used to represent the amount of repetitions of the Monte Carlo Simulations. 10,000 was chosen not only because it was the example used but also because it's a large number which allows for many means to be represented.
+
+## How did I define “approximately normal”?
+
+When looking at the histogram, an average mean which differs from the normal by less 0.01 can be considered normal. While it's not the most precise, I am hoping that if, when converted to a percent (1%) it cannot be represented without using fractions then that means it will be close enough. While this mainly accounts for the center, the normalized RMSE accounts for the tails. Since the tails make up a minority of the data, deviation less than 0.05 can still be considered normal as while it does deviate a fair amount, at this level of deviation the theoretical max any point can deviate is by 5. While that is a lot, it is extremely uncommon as that would mean each other gap has a deviation of 0 units. As it is the mean, it's more likely for each gap unit to be around 0.05 away from the Q-Q point which is reasonable as it's half of a tenth.
+
+## When was the sampling distribution approximately normal?
+
+n = 1
+
+Even with an n of 1, the simulated mean was 0.0013 which is 0.13% away from 0 which is the expected mean.
+
+## Why did I choose that value?
+
+### Simulation code and results
+
+```{r}
+sample_sizes <- c(1, 2, 3, 5, 10, 20, 30, 50, 100)
+results <- data.frame()
+
+normal_quartiles <- qnorm(c(0.25, 0.75))
+
+for (n in sample_sizes) {
+  set.seed(seed)
+  means <- replicate(B, mean(rnorm(n)))
+  
+  # Get Q-Q point coordinates without drawing a plot
+  qq_points <- qqnorm(means, plot.it = FALSE)
+  
+  # Reconstruct the reference line drawn by qqline()
+  observed_quartiles <- as.numeric(
+    quantile(means, c(0.25, 0.75))
+  )
+  
+  slope <- diff(observed_quartiles) / diff(normal_quartiles)
+  intercept <- observed_quartiles[1] -
+    slope * normal_quartiles[1]
+  
+  # Measure vertical departures from the line
+  line_values <- intercept + slope * qq_points$x
+  differences <- qq_points$y - line_values
+  
+  qq_rmse <- sqrt(mean(differences^2))
+  normalized_qq_rmse <- qq_rmse / slope
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n = n,
+      simulated_mean = mean(means),
+      simulated_SE = sd(means),
+      theoretical_SE = 1 / sqrt(n),
+      QQ_RMSE = qq_rmse,
+      normalized_QQ_RMSE = normalized_qq_rmse
+    )
+  )
+  
+  if (n %in% c(1, 2, 3, 5, 10, 30, 100)) {
+    hist(means, breaks = 40,
+         main = paste("Sample means: n =", n),
+         xlab = "Sample mean")
+    
+    qqnorm(means, main = paste("Normal Q-Q plot: n =", n))
+    qqline(means, col = "red")
+  }
+}
+
+knitr::kable(results, digits = 4)
+```
+
+### Histogram evidence
+
+As sample size increased all plotted histograms still followed the bell curve and maintained a normal distribution.
+
+### Q-Q plot evidence
+
+All are close to the Q-Q line, however when you look at the root mean square error between each point on the Q-Q lines you can see that they lower as n increases. When looking at the normalized RMSE, they're all fairly similar with the main outlier being n=20.
+
+### Numerical evidence
+
+No simulated mean differs more than 0.01 from 0.
+
+The standard errors were close to what was expected, with the greatest being a 0.0047 when n = 2.
+
+### Justification for my selected sample size
+
+With the low mean of n = 1 and the distribution remaining normal afterwards, it's fair to say that it is when it becomes normal.
+
+This is to be expected as averages of independent normal observations are normal
+
+## What surprised me, and what limitations did I observe?
+
+### Surprises
+
+There's nothing especially surprising about the normal population being distributed normally, but n=10 being the biggest outlier is strange
+
+### Limitations
+
+There is some variation seen, mainly in the amount of n values chosen (as there could always be more) and the variation in simulations as seen with outliers like n = 10. The normality criteria too could be problematic as something like 0.0099 would be considered as normal as 0.0000001.
+
+## What happened when I used a different seed?
+
+With this different seed, the average of the means is actually lower than those with the first seed making it only further support the claims from the first experiment.
+
+```{r}
+sample_sizes <- c(1, 2, 3, 5, 10, 20, 30, 50, 100)
+results <- data.frame()
+
+normal_quartiles <- qnorm(c(0.25, 0.75))
+
+for (n in sample_sizes) {
+  set.seed(0176)
+  means <- replicate(B, mean(rnorm(n)))
+  
+  # Get Q-Q point coordinates without drawing a plot
+  qq_points <- qqnorm(means, plot.it = FALSE)
+  
+  # Reconstruct the reference line drawn by qqline()
+  observed_quartiles <- as.numeric(
+    quantile(means, c(0.25, 0.75))
+  )
+  
+  slope <- diff(observed_quartiles) / diff(normal_quartiles)
+  intercept <- observed_quartiles[1] -
+    slope * normal_quartiles[1]
+  
+  # Measure vertical departures from the line
+  line_values <- intercept + slope * qq_points$x
+  differences <- qq_points$y - line_values
+  
+  qq_rmse <- sqrt(mean(differences^2))
+  normalized_qq_rmse <- qq_rmse / slope
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n = n,
+      simulated_mean = mean(means),
+      simulated_SE = sd(means),
+      theoretical_SE = 1 / sqrt(n),
+      QQ_RMSE = qq_rmse,
+      normalized_QQ_RMSE = normalized_qq_rmse
+    )
+  )
+  
+  if (n %in% c(1, 2, 3, 5, 10, 30, 100)) {
+    hist(means, breaks = 40,
+         main = paste("Sample means: n =", n),
+         xlab = "Sample mean")
+    
+    qqnorm(means, main = paste("Normal Q-Q plot: n =", n))
+    qqline(means, col = "red")
+  }
+}
+
+knitr::kable(results, digits = 4)
+```
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 29
+========================================================================
+
+USER
+
+Remember I am just talking about the normal population
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 30
+========================================================================
+
+USER
+
+So what do I need to explain more?
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 31
+========================================================================
+
+USER
+
+This is what I have, if there is nothing major missing I wish to move on to analyszng the next population:
+
+---
+title: "Standard Normal Analysis"
+format: html
+---
+
+## What population am I sampling from?
+
+### Population description
+
+Standard normal. The important characteristics of it is that it's a normal population which means we should expect a normal distribution
+
+### Theoretical mean and standard deviation
+
+We are assuming that the population mean is $\mu = 0$, and its standard deviation is $\sigma = 1$ as that is typical of a normal population.
+
+### CLT assumptions
+
+We are assuming that the observations with a sample are independent.
+
+The original population follows a bell curve with few massive outliers as seen below.
+
+```{r}
+seed = 9686
+B = 10000
+set.seed(seed)
+
+population_sample <- rnorm(10000, mean = 0, sd = 1)
+
+hist(population_sample,
+     breaks = 40,
+     probability = TRUE,
+     main = "Original population: Standard normal",
+     xlab = "Individual observation")
+
+curve(dnorm(x, mean = 0, sd = 1),
+      add = TRUE, col = "red", lwd = 2)
+```
+
+## What did I expect before running the simulation?
+
+Because the population is normal, I expect it to be normally distributed even as low as n =1. Which means the Q-Q graph will roughly follow the line and we should see a bell-curve which will only become more precise as n increases.
+
+## Which sample sizes did I investigate, and why?
+
+### Sample sizes
+
+I investigated n = 1, 2, 3, 5, 10, 20, 30, 50, and 100.
+
+We are starting from the lowest possible starting size, which is 1, and seeing how major changes impact it. The gap from 1 to 2 should be more impactful than the gap from 100 to 101, so we start with small increases and then towards the end do bigger ones.
+
+### Number of repetitions
+
+I used B = 10,000 repetitions for each sample size.
+
+B is used to represent the amount of repetitions of the Monte Carlo Simulations. 10,000 was chosen not only because it was the example used but also because it's a large number which allows for many means to be represented.
+
+## How did I define “approximately normal”?
+
+When looking at the histogram, an average mean which differs from the normal by less 0.01 can be considered normal. While it's not the most precise, I am hoping that if, when converted to a percent (1%) it cannot be represented without using fractions then that means it will be close enough. While this mainly accounts for the center, the normalized RMSE accounts for the tails. Since the tails make up a minority of the data, deviation less than 0.05 can still be considered normal as while it does deviate a fair amount, at this level of deviation the theoretical max any point can deviate is by 5. While that is a lot, it is extremely uncommon as that would mean each other gap has a deviation of 0 units. As it is the mean, it's more likely for each gap unit to be around 0.05 away from the Q-Q point which is reasonable as it's half of a tenth.
+
+## When was the sampling distribution approximately normal?
+
+n = 1
+
+Even with an n of 1, the simulated mean was 0.0013 which is 0.13% away from 0 which is the expected mean.
+
+## Why did I choose that value?
+
+### Simulation code and results
+
+```{r}
+sample_sizes <- c(1, 2, 3, 5, 10, 20, 30, 50, 100)
+results <- data.frame()
+
+normal_quartiles <- qnorm(c(0.25, 0.75))
+
+for (n in sample_sizes) {
+  set.seed(seed)
+  means <- replicate(B, mean(rnorm(n)))
+  
+  # Get Q-Q point coordinates without drawing a plot
+  qq_points <- qqnorm(means, plot.it = FALSE)
+  
+  # Reconstruct the reference line drawn by qqline()
+  observed_quartiles <- as.numeric(
+    quantile(means, c(0.25, 0.75))
+  )
+  
+  slope <- diff(observed_quartiles) / diff(normal_quartiles)
+  intercept <- observed_quartiles[1] -
+    slope * normal_quartiles[1]
+  
+  # Measure vertical departures from the line
+  line_values <- intercept + slope * qq_points$x
+  differences <- qq_points$y - line_values
+  
+  qq_rmse <- sqrt(mean(differences^2))
+  normalized_qq_rmse <- qq_rmse / slope
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n = n,
+      simulated_mean = mean(means),
+      simulated_SE = sd(means),
+      theoretical_SE = 1 / sqrt(n),
+      QQ_RMSE = qq_rmse,
+      normalized_QQ_RMSE = normalized_qq_rmse
+    )
+  )
+  
+  if (n %in% c(1, 2, 3, 5, 10, 30, 100)) {
+    hist(means, breaks = 40,
+         main = paste("Sample means: n =", n),
+         xlab = "Sample mean")
+    
+    qqnorm(means, main = paste("Normal Q-Q plot: n =", n))
+    qqline(means, col = "red")
+  }
+}
+
+knitr::kable(results, digits = 4)
+```
+
+### Histogram evidence
+
+As sample size increased all plotted histograms still followed the bell curve and maintained a normal distribution.
+
+### Q-Q plot evidence
+
+All are close to the Q-Q line, however when you look at the root mean square error between each point on the Q-Q lines you can see that they lower as n increases. When looking at the normalized RMSE, they're all fairly similar with the main outlier being n=20.
+
+### Numerical evidence
+
+No simulated mean differs more than 0.01 from 0.
+
+The standard errors were close to what was expected, with the greatest being a 0.0047 when n = 2.
+
+### Justification for my selected sample size
+
+With the low mean of n = 1 and the distribution remaining normal afterwards, it's fair to say that it is when it becomes normal.
+
+This is to be expected as averages of independent normal observations are normal
+
+## What surprised me, and what limitations did I observe?
+
+### Surprises
+
+There's nothing especially surprising about the normal population being distributed normally, but n=10 being the biggest outlier is strange
+
+### Limitations
+
+There is some variation seen, mainly in the amount of n values chosen (as there could always be more) and the variation in simulations as seen with outliers like n = 10. The normality criteria too could be problematic as something like 0.0099 would be considered as normal as 0.0000001.
+
+## What happened when I used a different seed?
+
+With this different seed, the average of the means is actually lower than those with the first seed making it only further support the claims from the first experiment. The normalised RMSE follow the same trend, with them generally being around the same which prove that n = 1 is sufficient. After all, in this seed too n = 1 and all n values after meet the criteria for normality.
+
+```{r}
+sample_sizes <- c(1, 2, 3, 5, 10, 20, 30, 50, 100)
+results <- data.frame()
+
+normal_quartiles <- qnorm(c(0.25, 0.75))
+
+for (n in sample_sizes) {
+  set.seed(0176)
+  means <- replicate(B, mean(rnorm(n)))
+  
+  # Get Q-Q point coordinates without drawing a plot
+  qq_points <- qqnorm(means, plot.it = FALSE)
+  
+  # Reconstruct the reference line drawn by qqline()
+  observed_quartiles <- as.numeric(
+    quantile(means, c(0.25, 0.75))
+  )
+  
+  slope <- diff(observed_quartiles) / diff(normal_quartiles)
+  intercept <- observed_quartiles[1] -
+    slope * normal_quartiles[1]
+  
+  # Measure vertical departures from the line
+  line_values <- intercept + slope * qq_points$x
+  differences <- qq_points$y - line_values
+  
+  qq_rmse <- sqrt(mean(differences^2))
+  normalized_qq_rmse <- qq_rmse / slope
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n = n,
+      simulated_mean = mean(means),
+      simulated_SE = sd(means),
+      theoretical_SE = 1 / sqrt(n),
+      QQ_RMSE = qq_rmse,
+      normalized_QQ_RMSE = normalized_qq_rmse
+    )
+  )
+  
+  if (n %in% c(1, 2, 3, 5, 10, 30, 100)) {
+    hist(means, breaks = 40,
+         main = paste("Sample means: n =", n),
+         xlab = "Sample mean")
+    
+    qqnorm(means, main = paste("Normal Q-Q plot: n =", n))
+    qqline(means, col = "red")
+  }
+}
+
+knitr::kable(results, digits = 4)
+```
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 32
+========================================================================
+
+USER
+
+I should mention this too but do not tell me things which are purely opinion, only tell me things which are strictly necessary for project or already provided from the guidelines
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 33
+========================================================================
+
+USER
+
+Should I change the code under the CLT assumption?
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 34
+========================================================================
+
+USER
+
+I haven't done everything yet but what am I missing?
+
+---
+title: "Six-Sided Die Analysis"
+format: html
+---
+
+## What population am I sampling from?
+
+### Population description
+
+The population here is discretely uniform, with each simulation having a chance to be any number from 1 to 6 and each are equally likely. This means it's discrete, uniform, and symmetrical.
+
+### Theoretical mean and standard deviation
+
+We are assuming that the population mean is $\mu = 3.5$, and its standard deviation is $\sigma = \sqrt{35/12}$ as 3.5 is the mean of all possible rolls.
+
+### CLT assumptions
+
+We are assuming that the observations with a sample are independent, identitically distributed, and converge to a normal distribution from the start due to being a normal distribution. There should be a finite variance of 1, a mean of 0, and a standard deviation of 1.
+
+The original population follows a bell curve with few massive outliers as seen below.
+
+```{r}
+seed <- 9686
+B <- 10000
+set.seed(seed)
+
+population_sample <- sample(1:6, size = B, replace = TRUE)
+
+frequencies <- table(
+  factor(population_sample, levels = 1:6)
+)
+
+barplot(
+  frequencies / B,
+  main = "Original population: Fair six-sided die",
+  xlab = "Die outcome",
+  ylab = "Relative frequency"
+)
+
+abline(h = 1 / 6, col = "red", lwd = 2)
+```
+
+## What did I expect before running the simulation?
+
+It's commonly understood that when rolling a die it will converge on 3.5. Given B is equal to 10,000 I have to assume at n=1 it will have the proper simulated mean for normality but I am unsure if the normalized RMSE will fit. I do think it is more likely than not though, so I will assert that it will be normal at n = 1.
+
+## aWhich sample sizes did I investigate, and why?
+
+### Sample sizes
+
+I investigated n = 1, 2, 3, 5, 10, 20, 30, 50, and 100.
+
+We are starting from the lowest possible starting size, which is 1, and seeing how major changes impact it. The gap from 1 to 2 should be more impactful than the gap from 100 to 101, so we start with small increases and then towards the end do bigger ones.
+
+### Number of repetitions
+
+I used B = 10,000 repetitions for each sample size.
+
+B is used to represent the amount of repetitions of the Monte Carlo Simulations. 10,000 was chosen not only because it was the example used but also because it's a large number which allows for many means to be represented.
+
+## How did I define “approximately normal”?
+
+When looking at the histogram, an average mean which differs from the normal by less 0.01 can be considered normal. While it's not the most precise, I am hoping that if, when converted to a percent (1%) it cannot be represented without using fractions then that means it will be close enough. While this mainly accounts for the center, the normalized RMSE accounts for the tails. Since the tails make up a minority of the data, deviation less than 0.05 can still be considered normal as while it does deviate a fair amount, at this level of deviation the theoretical max any point can deviate is by 5. While that is a lot, it is extremely uncommon as that would mean each other gap has a deviation of 0 units. As it is the mean, it's more likely for each gap unit to be around 0.05 away from the Q-Q point which is reasonable as it's half of a tenth.
+
+## When was the sampling distribution approximately normal?
+
+n = 1
+
+Even with an n of 1, the simulated mean was 0.0013 which is 0.13% away from 0 which is the expected mean.
+
+## Why did I choose that value?
+
+### Simulation code and results
+
+```{r}
+sample_sizes <- c(1, 2, 3, 5, 10, 20, 30, 50, 100)
+results <- data.frame()
+
+normal_quartiles <- qnorm(c(0.25, 0.75))
+
+for (n in sample_sizes) {
+  set.seed(seed)
+  means <- replicate(
+    B,
+    mean(sample(1:6, size = n, replace = TRUE))
+  )
+  
+  # Get Q-Q point coordinates without drawing a plot
+  qq_points <- qqnorm(means, plot.it = FALSE)
+  
+  # Reconstruct the reference line drawn by qqline()
+  observed_quartiles <- as.numeric(
+    quantile(means, c(0.25, 0.75))
+  )
+  
+  slope <- diff(observed_quartiles) / diff(normal_quartiles)
+  intercept <- observed_quartiles[1] -
+    slope * normal_quartiles[1]
+  
+  # Measure vertical departures from the line
+  line_values <- intercept + slope * qq_points$x
+  differences <- qq_points$y - line_values
+  
+  qq_rmse <- sqrt(mean(differences^2))
+  normalized_qq_rmse <- qq_rmse / slope
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n = n,
+      simulated_mean = mean(means),
+      simulated_SE = sd(means),
+      theoretical_SE = sqrt(35 / 12) / sqrt(n),
+      QQ_RMSE = qq_rmse,
+      normalized_QQ_RMSE = normalized_qq_rmse
+    )
+  )
+  
+  if (n %in% c(1, 2, 3, 5, 10, 30, 100)) {
+    hist(means, breaks = 40,
+         main = paste("Sample means: n =", n),
+         xlab = "Sample mean")
+    
+    qqnorm(means, main = paste("Normal Q-Q plot: n =", n))
+    qqline(means, col = "red")
+  }
+}
+
+knitr::kable(results, digits = 4)
+```
+
+### Histogram evidence
+
+As sample size increased all plotted histograms still followed the bell curve and maintained a normal distribution.
+
+### Q-Q plot evidence
+
+All are close to the Q-Q line, however when you look at the root mean square error between each point on the Q-Q lines you can see that they lower as n increases. When looking at the normalized RMSE, they're all fairly similar with the main outlier being n=20.
+
+### Numerical evidence
+
+No simulated mean differs more than 0.01 from 0.
+
+The standard errors were close to what was expected, with the greatest being a 0.0047 when n = 2.
+
+### Justification for my selected sample size
+
+With the low mean of n = 1 and the distribution remaining normal afterwards, it's fair to say that it is when it becomes normal.
+
+This is to be expected as averages of independent normal observations are normal
+
+## What surprised me, and what limitations did I observe?
+
+### Surprises
+
+There's nothing especially surprising about the normal population being distributed normally, but n=10 being the biggest outlier is strange
+
+### Limitations
+
+There is some variation seen, mainly in the amount of n values chosen (as there could always be more) and the variation in simulations as seen with outliers like n = 10. The normality criteria too could be problematic as something like 0.0099 would be considered as normal as 0.0000001.
+
+## What happened when I used a different seed?
+
+With this different seed, the average of the means is actually lower than those with the first seed, but notably n = 1 has a mean above 0.01 which means it can't be considered normal. The normalized RMSE are generally being around the same, even for n = 1. While the simulated mean does discredit my original answer, the stark differences in answers makes me believe this to be an outlier as it's substantially higher than any other sample size across both seeds.
+
+```{r}
+sample_sizes <- c(1, 2, 3, 5, 10, 20, 30, 50, 100)
+results <- data.frame()
+
+normal_quartiles <- qnorm(c(0.25, 0.75))
+
+for (n in sample_sizes) {
+  set.seed(0176)
+  means <- replicate(
+    B,
+    mean(sample(1:6, size = n, replace = TRUE))
+  )
+  
+  # Get Q-Q point coordinates without drawing a plot
+  qq_points <- qqnorm(means, plot.it = FALSE)
+  
+  # Reconstruct the reference line drawn by qqline()
+  observed_quartiles <- as.numeric(
+    quantile(means, c(0.25, 0.75))
+  )
+  
+  slope <- diff(observed_quartiles) / diff(normal_quartiles)
+  intercept <- observed_quartiles[1] -
+    slope * normal_quartiles[1]
+  
+  # Measure vertical departures from the line
+  line_values <- intercept + slope * qq_points$x
+  differences <- qq_points$y - line_values
+  
+  qq_rmse <- sqrt(mean(differences^2))
+  normalized_qq_rmse <- qq_rmse / slope
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n = n,
+      simulated_mean = mean(means),
+      simulated_SE = sd(means),
+      theoretical_SE = sqrt(35 / 12) / sqrt(n),
+      QQ_RMSE = qq_rmse,
+      normalized_QQ_RMSE = normalized_qq_rmse
+    )
+  )
+  
+  if (n %in% c(1, 2, 3, 5, 10, 30, 100)) {
+    hist(means, breaks = 40,
+         main = paste("Sample means: n =", n),
+         xlab = "Sample mean")
+    
+    qqnorm(means, main = paste("Normal Q-Q plot: n =", n))
+    qqline(means, col = "red")
+  }
+}
+
+knitr::kable(results, digits = 4)
+```
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 35
+========================================================================
+
+USER
+
+What is the largest SE gap between actual and theoretical
+
+[Attachments: attachments/image(20261012-011841).png]
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 36
+========================================================================
+
+USER
+
+It it possible to add a red line to the histogram to show what a normal distribution would look like?
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 37
+========================================================================
+
+USER
+
+Can you have one for the normal population too?
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 38
+========================================================================
+
+USER
+
+Finished with the die population, is there anything I am missing and if not what should I move onto next?
+
+---
+title: "Six-Sided Die Analysis"
+format: html
+---
+
+## What population am I sampling from?
+
+### Population description
+
+The population here is discretely uniform, with each simulation having a chance to be any number from 1 to 6 and each are equally likely. This means it's discrete, uniform, and symmetrical.
+
+### Theoretical mean and standard deviation
+
+We are assuming that the population mean is $\mu = 3.5$, and its standard deviation is $\sigma = \sqrt{35/12}$ as 3.5 is the mean of all possible rolls.
+
+### CLT assumptions
+
+We are assuming that the observations with a sample are independent, identitically distributed, and converge to a normal distribution from the start due to being a normal distribution. There should be a finite variance of 1, a mean of 0, and a standard deviation of 1.
+
+The original population follows a bell curve with few massive outliers as seen below.
+
+```{r}
+seed <- 9686
+B <- 10000
+set.seed(seed)
+
+population_sample <- sample(1:6, size = B, replace = TRUE)
+
+frequencies <- table(
+  factor(population_sample, levels = 1:6)
+)
+
+barplot(
+  frequencies / B,
+  main = "Original population: Fair six-sided die",
+  xlab = "Die outcome",
+  ylab = "Relative frequency"
+)
+
+abline(h = 1 / 6, col = "red", lwd = 2)
+```
+
+## What did I expect before running the simulation?
+
+It's commonly understood that when rolling a die it will converge on 3.5. However that would only be the mean over many rolls, even with such a high B value. Given the Q-Q plot too I have to assume something like 50 would be an appropriate n value for it to become normal.
+
+## Which sample sizes did I investigate, and why?
+
+### Sample sizes
+
+I investigated n = 1, 2, 3, 5, 10, 20, 30, 40, 50, and 100.
+
+We are starting from the lowest possible starting size, which is 1, and seeing how major changes impact it. The gap from 1 to 2 should be more impactful than the gap from 100 to 101, so we start with small increases and then towards the end do bigger ones. 40 was added because normality was achieved between 30 and 50, and 60 was added to ensure it stays normal.
+
+### Number of repetitions
+
+I used B = 10,000 repetitions for each sample size.
+
+B is used to represent the amount of repetitions of the Monte Carlo Simulations. 10,000 was chosen not only because it was the example used but also because it's a large number which allows for many means to be represented.
+
+## How did I define “approximately normal”?
+
+When looking at the histogram, an average mean which differs from the normal by less 0.01 can be considered normal. While it's not the most precise, I am hoping that if, when converted to a percent (1%) it cannot be represented without using fractions then that means it will be close enough. While this mainly accounts for the center, the normalized RMSE accounts for the tails. Since the tails make up a minority of the data, deviation less than 0.05 can still be considered normal as while it does deviate a fair amount, at this level of deviation the theoretical max any point can deviate is by 5. While that is a lot, it is extremely uncommon as that would mean each other gap has a deviation of 0 units. As it is the mean, it's more likely for each gap unit to be around 0.05 away from the Q-Q point which is reasonable as it's half of a tenth.
+
+## When was the sampling distribution approximately normal?
+
+n = 50
+
+While the simulated mean has been within acceptable values of normal since, the normalized RMSE was not within acceptable range of normality until n = 50. Even adding n = 40, it was not normal there.
+
+## Why did I choose that value?
+
+### Simulation code and results
+
+```{r}
+sample_sizes <- c(1, 2, 3, 5, 10, 20, 30, 40, 50, 60, 100)
+results <- data.frame()
+
+normal_quartiles <- qnorm(c(0.25, 0.75))
+
+for (n in sample_sizes) {
+  set.seed(seed)
+  means <- replicate(
+    B,
+    mean(sample(1:6, size = n, replace = TRUE))
+  )
+  
+  # Get Q-Q point coordinates without drawing a plot
+  qq_points <- qqnorm(means, plot.it = FALSE)
+  
+  # Reconstruct the reference line drawn by qqline()
+  observed_quartiles <- as.numeric(
+    quantile(means, c(0.25, 0.75))
+  )
+  
+  slope <- diff(observed_quartiles) / diff(normal_quartiles)
+  intercept <- observed_quartiles[1] -
+    slope * normal_quartiles[1]
+  
+  # Measure vertical departures from the line
+  line_values <- intercept + slope * qq_points$x
+  differences <- qq_points$y - line_values
+  
+  qq_rmse <- sqrt(mean(differences^2))
+  normalized_qq_rmse <- qq_rmse / slope
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n = n,
+      simulated_mean = mean(means),
+      simulated_SE = sd(means),
+      theoretical_SE = sqrt(35 / 12) / sqrt(n),
+      QQ_RMSE = qq_rmse,
+      normalized_QQ_RMSE = normalized_qq_rmse
+    )
+  )
+  
+  if (n %in% c(1, 2, 3, 5, 10, 30, 40, 50, 60, 100)) {
+    hist(
+      means,
+      breaks = 40,
+      probability = TRUE,
+      main = paste("Sample means: n =", n),
+      xlab = "Sample mean",
+      ylab = "Density"
+    )
+    
+    curve(
+      dnorm(x, mean = 3.5, sd = sqrt(35 / 12) / sqrt(n)),
+      add = TRUE,
+      col = "red",
+      lwd = 2
+    )
+    
+    qqnorm(means, main = paste("Normal Q-Q plot: n =", n))
+    qqline(means, col = "red")
+  }
+}
+
+knitr::kable(results, digits = 4)
+```
+
+### Histogram evidence
+
+With n = 2, it was clearly begin to conform to a normal distribution which only became more clear as n increased. In fact, by n = 2 it was already within the simulated mean bounds for being considered normal. Despite that, the red line showed that until n = 40 the line representing a normal distribution didn't closely follow the actual histogram, mainly due to the large disparity in data present from n = 30 and smaller.
+
+### Q-Q plot evidence
+
+The Q-Q plot is what makes n = 50 the required to be considered normal. The Q-Q plot forms an interesting shape where at n =1 there are lines for 1, 2, 3, 4, 5, and 6 only stretching horizontally. As n increases more horizontal lines form, and by n = 50 those lines become small and plentiful enough to count for normality.
+
+### Numerical evidence
+
+The expected mean was 3.5, so we are looking for means above 3.51 and below 3.49 which we see achieved at n = 2 (though n = 3 isn't in that range, n= 4 onwards is).
+
+The standard error wasn't too far from the theoreitcal with the biggest gap seen being in n = 3 with a gap of 0.0149.
+
+### Justification for my selected sample size
+
+n = 50 was the first one to have the normalized RMSE within acceptable bounds, making it the only option to be considered as while the simulated mean was always successful by n = 3 it couldn't maintain a normal RMSE.
+
+## What surprised me, and what limitations did I observe?
+
+### Surprises
+
+While I did partially expect the Q-Q to be an issue, I was surprised the extent to which it was. While the histogram became normal fairly soon, the RMSE took a long time to achieve that, far longer than I had initially expected.
+
+### Limitations
+
+There is some variation seen, mainly in the amount of n values chosen (as there could always be more) and the variation in simulations as seen with outliers like n = 10. The normality criteria too could be problematic as something like a mean of 3.5099 would be considered as normal as 3.5 exactly. Likewise with how normality is described by it's proximity to the mean, it's possible for a non-normal distribution to fulfill that. That's sort of seen with the fact that it remains discrete even as n increases which does effect the results. Also due to using the Monte Carlo variation the seeds will change the results.
+
+## What happened when I used a different seed?
+
+With this seed we do see it become normal at n = 20, though only barely and it does not manage to maintain that. Only by n = 50 does it stabilize and become normal consistently with supports the conclusion we got earlier.
+
+```{r}
+sample_sizes <- c(1, 2, 3, 5, 10, 20, 30, 40, 50, 60, 100)
+results <- data.frame()
+
+normal_quartiles <- qnorm(c(0.25, 0.75))
+
+for (n in sample_sizes) {
+  set.seed(0176)
+  means <- replicate(
+    B,
+    mean(sample(1:6, size = n, replace = TRUE))
+  )
+  
+  # Get Q-Q point coordinates without drawing a plot
+  qq_points <- qqnorm(means, plot.it = FALSE)
+  
+  # Reconstruct the reference line drawn by qqline()
+  observed_quartiles <- as.numeric(
+    quantile(means, c(0.25, 0.75))
+  )
+  
+  slope <- diff(observed_quartiles) / diff(normal_quartiles)
+  intercept <- observed_quartiles[1] -
+    slope * normal_quartiles[1]
+  
+  # Measure vertical departures from the line
+  line_values <- intercept + slope * qq_points$x
+  differences <- qq_points$y - line_values
+  
+  qq_rmse <- sqrt(mean(differences^2))
+  normalized_qq_rmse <- qq_rmse / slope
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n = n,
+      simulated_mean = mean(means),
+      simulated_SE = sd(means),
+      theoretical_SE = sqrt(35 / 12) / sqrt(n),
+      QQ_RMSE = qq_rmse,
+      normalized_QQ_RMSE = normalized_qq_rmse
+    )
+  )
+  
+  if (n %in% c(1, 2, 3, 5, 10, 30, 40, 50, 60, 100)) {
+    hist(
+      means,
+      breaks = 40,
+      probability = TRUE,
+      main = paste("Sample means: n =", n),
+      xlab = "Sample mean",
+      ylab = "Density"
+    )
+    
+    curve(
+      dnorm(x, mean = 3.5, sd = sqrt(35 / 12) / sqrt(n)),
+      add = TRUE,
+      col = "red",
+      lwd = 2
+    )
+    
+    qqnorm(means, main = paste("Normal Q-Q plot: n =", n))
+    qqline(means, col = "red")
+  }
+}
+
+knitr::kable(results, digits = 4)
+```
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 39
+========================================================================
+
+USER
+
+What am I missing and can I move on?
+
+---
+title: "Six-Sided Die Analysis"
+format: html
+---
+
+## What population am I sampling from?
+
+### Population description
+
+The population here is discretely uniform, with each simulation having a chance to be any number from 1 to 6 and each are equally likely. This means it's discrete, uniform, and symmetrical.
+
+### Theoretical mean and standard deviation
+
+We are assuming that the population mean is $\mu = 3.5$, and its standard deviation is $\sigma = \sqrt{35/12}$ as 3.5 is the mean of all possible rolls.
+
+### CLT assumptions
+
+We are assuming that the observations with a sample are independent, identitically distributed, and converge to a normal distribution from the start due to being a normal distribution. There should be a finite variance of $35/12$, a mean of 3.5, and a standard deviation of $\sqrt{35/12}$.
+
+The original population follows a bell curve with few massive outliers as seen below.
+
+```{r}
+seed <- 9686
+B <- 10000
+set.seed(seed)
+
+population_sample <- sample(1:6, size = B, replace = TRUE)
+
+frequencies <- table(
+  factor(population_sample, levels = 1:6)
+)
+
+barplot(
+  frequencies / B,
+  main = "Original population: Fair six-sided die",
+  xlab = "Die outcome",
+  ylab = "Relative frequency"
+)
+
+abline(h = 1 / 6, col = "red", lwd = 2)
+```
+
+## What did I expect before running the simulation?
+
+It's commonly understood that when rolling a die it will converge on 3.5. However that would only be the mean over many rolls, even with such a high B value. Given the Q-Q plot too I have to assume something like 50 would be an appropriate n value for it to become normal.
+
+## Which sample sizes did I investigate, and why?
+
+### Sample sizes
+
+I investigated n = 1, 2, 3, 4, 5, 10, 20, 30, 40, 50, and 100.
+
+We are starting from the lowest possible starting size, which is 1, and seeing how major changes impact it. The gap from 1 to 2 should be more impactful than the gap from 100 to 101, so we start with small increases and then towards the end do bigger ones. 40 was added because normality was achieved between 30 and 50, and 60 was added to ensure it stays normal. 4 was added since
+
+### Number of repetitions
+
+I used B = 10,000 repetitions for each sample size.
+
+B is used to represent the amount of repetitions of the Monte Carlo Simulations. 10,000 was chosen not only because it was the example used but also because it's a large number which allows for many means to be represented.
+
+## How did I define “approximately normal”?
+
+When looking at the histogram, an average mean which differs from the normal by less 0.01 can be considered normal. While it's not the most precise, I am hoping that if, when converted to a percent (1%) it cannot be represented without using fractions then that means it will be close enough. While this mainly accounts for the center, the normalized RMSE accounts for the tails. Since the tails make up a minority of the data, deviation less than 0.05 can still be considered normal as while it does deviate a fair amount, at this level of deviation the theoretical max any point can deviate is by 5. While that is a lot, it is extremely uncommon as that would mean each other gap has a deviation of 0 units. As it is the mean, it's more likely for each gap unit to be around 0.05 away from the Q-Q point which is reasonable as it's half of a tenth.
+
+## When was the sampling distribution approximately normal?
+
+n = 50
+
+While the simulated mean has been within acceptable values of normal since, the normalized RMSE was not within acceptable range of normality until n = 50. Even adding n = 40, it was not normal there.
+
+## Why did I choose that value?
+
+### Simulation code and results
+
+```{r}
+sample_sizes <- c(1, 2, 3, 4, 5, 10, 20, 30, 40, 50, 60, 100)
+results <- data.frame()
+
+normal_quartiles <- qnorm(c(0.25, 0.75))
+
+for (n in sample_sizes) {
+  set.seed(seed)
+  means <- replicate(
+    B,
+    mean(sample(1:6, size = n, replace = TRUE))
+  )
+  
+  # Get Q-Q point coordinates without drawing a plot
+  qq_points <- qqnorm(means, plot.it = FALSE)
+  
+  # Reconstruct the reference line drawn by qqline()
+  observed_quartiles <- as.numeric(
+    quantile(means, c(0.25, 0.75))
+  )
+  
+  slope <- diff(observed_quartiles) / diff(normal_quartiles)
+  intercept <- observed_quartiles[1] -
+    slope * normal_quartiles[1]
+  
+  # Measure vertical departures from the line
+  line_values <- intercept + slope * qq_points$x
+  differences <- qq_points$y - line_values
+  
+  qq_rmse <- sqrt(mean(differences^2))
+  normalized_qq_rmse <- qq_rmse / slope
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n = n,
+      simulated_mean = mean(means),
+      simulated_SE = sd(means),
+      theoretical_SE = sqrt(35 / 12) / sqrt(n),
+      QQ_RMSE = qq_rmse,
+      normalized_QQ_RMSE = normalized_qq_rmse
+    )
+  )
+  
+  if (n %in% c(1, 2, 3, 4, 5, 10, 30, 40, 50, 60, 100)) {
+    hist(
+      means,
+      breaks = 40,
+      probability = TRUE,
+      main = paste("Sample means: n =", n),
+      xlab = "Sample mean",
+      ylab = "Density"
+    )
+    
+    curve(
+      dnorm(x, mean = 3.5, sd = sqrt(35 / 12) / sqrt(n)),
+      add = TRUE,
+      col = "red",
+      lwd = 2
+    )
+    
+    qqnorm(means, main = paste("Normal Q-Q plot: n =", n))
+    qqline(means, col = "red")
+  }
+}
+
+knitr::kable(results, digits = 4)
+```
+
+### Histogram evidence
+
+With n = 2, it was clearly begin to conform to a normal distribution which only became more clear as n increased. In fact, by n = 2 it was already within the simulated mean bounds for being considered normal. Despite that, the red line showed that until n = 40 the line representing a normal distribution didn't closely follow the actual histogram, mainly due to the large disparity in data present from n = 30 and smaller.
+
+### Q-Q plot evidence
+
+The Q-Q plot is what makes n = 50 the required to be considered normal. The Q-Q plot forms an interesting shape where at n =1 there are lines for 1, 2, 3, 4, 5, and 6 only stretching horizontally. As n increases more horizontal lines form, and by n = 50 those lines become small and plentiful enough to count for normality.
+
+### Numerical evidence
+
+The expected mean was 3.5, so we are looking for means above 3.51 and below 3.49 which we see achieved at n = 2 (though n = 3 isn't in that range, n= 4 onward is).
+
+The standard error wasn't too far from the theoretical with the biggest gap seen being in n = 3 with a gap of 0.0149.
+
+### Justification for my selected sample size
+
+n = 50 was the first one to have the normalized RMSE within acceptable bounds, making it the only option to be considered as while the simulated mean was always successful by n = 3 it couldn't maintain a normal RMSE.
+
+## What surprised me, and what limitations did I observe?
+
+### Surprises
+
+While I did partially expect the Q-Q to be an issue, I was surprised the extent to which it was. While the histogram became normal fairly soon, the RMSE took a long time to achieve that, more than anything though I am surprised I was spot on with my prediction as I was fairly uncertain.
+
+### Limitations
+
+There is some variation seen, mainly in the amount of n values chosen (as there could always be more) and the variation in simulations as seen with outliers like n = 10. The normality criteria too could be problematic as something like a mean of 3.5099 would be considered as normal as 3.5 exactly. Likewise with how normality is described by it's proximity to the mean, it's possible for a non-normal distribution to fulfill that. That's sort of seen with the fact that it remains discrete even as n increases which does effect the results. Also due to using the Monte Carlo variation the seeds will change the results.
+
+## What happened when I used a different seed?
+
+With this seed we do see it become normal at n = 20, though only barely and it does not manage to maintain that. Only by n = 50 does it stabilize and become normal consistently with supports the conclusion we got earlier.
+
+```{r}
+sample_sizes <- c(1, 2, 3, 4, 5, 10, 20, 30, 40, 50, 60, 100)
+results <- data.frame()
+
+normal_quartiles <- qnorm(c(0.25, 0.75))
+
+for (n in sample_sizes) {
+  set.seed(0176)
+  means <- replicate(
+    B,
+    mean(sample(1:6, size = n, replace = TRUE))
+  )
+  
+  # Get Q-Q point coordinates without drawing a plot
+  qq_points <- qqnorm(means, plot.it = FALSE)
+  
+  # Reconstruct the reference line drawn by qqline()
+  observed_quartiles <- as.numeric(
+    quantile(means, c(0.25, 0.75))
+  )
+  
+  slope <- diff(observed_quartiles) / diff(normal_quartiles)
+  intercept <- observed_quartiles[1] -
+    slope * normal_quartiles[1]
+  
+  # Measure vertical departures from the line
+  line_values <- intercept + slope * qq_points$x
+  differences <- qq_points$y - line_values
+  
+  qq_rmse <- sqrt(mean(differences^2))
+  normalized_qq_rmse <- qq_rmse / slope
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n = n,
+      simulated_mean = mean(means),
+      simulated_SE = sd(means),
+      theoretical_SE = sqrt(35 / 12) / sqrt(n),
+      QQ_RMSE = qq_rmse,
+      normalized_QQ_RMSE = normalized_qq_rmse
+    )
+  )
+  
+  if (n %in% c(1, 2, 3, 4, 5, 10, 30, 40, 50, 60, 100)) {
+    hist(
+      means,
+      breaks = 40,
+      probability = TRUE,
+      main = paste("Sample means: n =", n),
+      xlab = "Sample mean",
+      ylab = "Density"
+    )
+    
+    curve(
+      dnorm(x, mean = 3.5, sd = sqrt(35 / 12) / sqrt(n)),
+      add = TRUE,
+      col = "red",
+      lwd = 2
+    )
+    
+    qqnorm(means, main = paste("Normal Q-Q plot: n =", n))
+    qqline(means, col = "red")
+  }
+}
+
+knitr::kable(results, digits = 4)
+```
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 40
+========================================================================
+
+USER
+
+I think I have everything, do a last check then prepare me to move on to the next one.
+
+---
+title: "Six-Sided Die Analysis"
+format: html
+---
+
+## What population am I sampling from?
+
+### Population description
+
+The population here is discretely uniform, with each simulation having a chance to be any number from 1 to 6 and each are equally likely. This means it's discrete, uniform, and symmetrical.
+
+### Theoretical mean and standard deviation
+
+We are assuming that the population mean is $\mu = 3.5$, and its standard deviation is $\sigma = \sqrt{35/12}$ as 3.5 is the mean of all possible rolls.
+
+### CLT assumptions
+
+We are assuming that the observations with a sample are independent, identitically distributed, and that they will eventually converge to a normal distribution. There should be a finite variance of $35/12$, a mean of 3.5, and a standard deviation of $\sqrt{35/12}$.
+
+The original population follows a bell curve with few massive outliers as seen below.
+
+```{r}
+seed <- 9686
+B <- 10000
+set.seed(seed)
+
+population_sample <- sample(1:6, size = B, replace = TRUE)
+
+frequencies <- table(
+  factor(population_sample, levels = 1:6)
+)
+
+barplot(
+  frequencies / B,
+  main = "Original population: Fair six-sided die",
+  xlab = "Die outcome",
+  ylab = "Relative frequency"
+)
+
+abline(h = 1 / 6, col = "red", lwd = 2)
+```
+
+## What did I expect before running the simulation?
+
+It's commonly understood that when rolling a die it will converge on 3.5. However that would only be the mean over many rolls, even with such a high B value. Given the Q-Q plot too I have to assume something like 50 would be an appropriate n value for it to become normal.
+
+## Which sample sizes did I investigate, and why?
+
+### Sample sizes
+
+I investigated n = 1, 2, 3, 5, 10, 20, 30, 40, 50, and 100.
+
+We are starting from the lowest possible starting size, which is 1, and seeing how major changes impact it. The gap from 1 to 2 should be more impactful than the gap from 100 to 101, so we start with small increases and then towards the end do bigger ones. 40 was added because normality was achieved between 30 and 50, and 60 was added to ensure it stays normal.
+
+### Number of repetitions
+
+I used B = 10,000 repetitions for each sample size.
+
+B is used to represent the amount of repetitions of the Monte Carlo Simulations. 10,000 was chosen not only because it was the example used but also because it's a large number which allows for many means to be represented.
+
+## How did I define “approximately normal”?
+
+When looking at the histogram, an average mean (the mean of the means in the histogram) which differs from the expected mean (3.5) by less 0.01 can be considered normal. While it's not the most precise, I am hoping that if, when converted to a percent (1%) it cannot be represented without using fractions then that means it will be close enough. While this mainly accounts for the center, the normalized RMSE accounts for the tails. Since the tails make up a minority of the data, deviation less than 0.05 can still be considered normal as while it does deviate a fair amount, at this level of deviation the theoretical max any point can deviate is by 5. While that is a lot, it is extremely uncommon as that would mean each other gap has a deviation of 0 units. An average gap of 0.05 is acceptable as it's half of a tenth.
+
+## When was the sampling distribution approximately normal?
+
+n = 50
+
+While the simulated mean has been within acceptable values of normal since n = 20, the normalized RMSE was not within acceptable range of normality until n = 50. Even adding n = 40, it was not normal there.
+
+## Why did I choose that value?
+
+### Simulation code and results
+
+```{r}
+sample_sizes <- c(1, 2, 3, 5, 10, 20, 30, 40, 50, 60, 100)
+results <- data.frame()
+
+normal_quartiles <- qnorm(c(0.25, 0.75))
+
+for (n in sample_sizes) {
+  set.seed(seed)
+  means <- replicate(
+    B,
+    mean(sample(1:6, size = n, replace = TRUE))
+  )
+  
+  # Get Q-Q point coordinates without drawing a plot
+  qq_points <- qqnorm(means, plot.it = FALSE)
+  
+  # Reconstruct the reference line drawn by qqline()
+  observed_quartiles <- as.numeric(
+    quantile(means, c(0.25, 0.75))
+  )
+  
+  slope <- diff(observed_quartiles) / diff(normal_quartiles)
+  intercept <- observed_quartiles[1] -
+    slope * normal_quartiles[1]
+  
+  # Measure vertical departures from the line
+  line_values <- intercept + slope * qq_points$x
+  differences <- qq_points$y - line_values
+  
+  qq_rmse <- sqrt(mean(differences^2))
+  normalized_qq_rmse <- qq_rmse / slope
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n = n,
+      simulated_mean = mean(means),
+      simulated_SE = sd(means),
+      theoretical_SE = sqrt(35 / 12) / sqrt(n),
+      QQ_RMSE = qq_rmse,
+      normalized_QQ_RMSE = normalized_qq_rmse
+    )
+  )
+  
+  if (n %in% c(1, 2, 3, 5, 10, 30, 40, 50, 60, 100)) {
+    hist(
+      means,
+      breaks = 40,
+      probability = TRUE,
+      main = paste("Sample means: n =", n),
+      xlab = "Sample mean",
+      ylab = "Density"
+    )
+    
+    curve(
+      dnorm(x, mean = 3.5, sd = sqrt(35 / 12) / sqrt(n)),
+      add = TRUE,
+      col = "red",
+      lwd = 2
+    )
+    
+    qqnorm(means, main = paste("Normal Q-Q plot: n =", n))
+    qqline(means, col = "red")
+  }
+}
+
+knitr::kable(results, digits = 4)
+```
+
+### Histogram evidence
+
+With n = 2, it was clearly begin to conform to a normal distribution which only became more clear as n increased. In fact, by n = 2 it was already within the simulated mean bounds for being considered normal. Despite that, the red line showed that until n = 40 the line representing a normal distribution didn't closely follow the actual histogram, mainly due to the large disparity in data present from n = 30 and smaller.
+
+### Q-Q plot evidence
+
+The Q-Q plot is what makes n = 50 the required to be considered normal. The Q-Q plot forms an interesting shape where at n =1 there are lines for 1, 2, 3, 4, 5, and 6 only stretching horizontally. As n increases more horizontal lines form, and by n = 50 those lines become small and plentiful enough to count for normality.
+
+### Numerical evidence
+
+The expected mean was 3.5, so we are looking for means above 3.51 and below 3.49 which we see achieved at n = 2 (though n = 3 isn't in that range, n= 4 onward is).
+
+The standard error wasn't too far from the theoretical with the biggest gap seen being in n = 3 with a gap of 0.0149.
+
+### Justification for my selected sample size
+
+n = 50 was the first one to have the normalized RMSE within acceptable bounds, making it the only option to be considered as while the simulated mean was always successful by n = 3 it couldn't maintain a normal RMSE.
+
+## What surprised me, and what limitations did I observe?
+
+### Surprises
+
+While I did partially expect the Q-Q to be an issue, I was surprised the extent to which it was. While the histogram became normal fairly soon, the RMSE took a long time to achieve that, more than anything though I am surprised I was spot on with my prediction as I was fairly uncertain.
+
+### Limitations
+
+There is some variation seen, mainly in the amount of n values chosen (as there could always be more) and the variation in simulations as seen with outliers like n = 10. The normality criteria too could be problematic as something like a mean of 3.5099 would be considered as normal as 3.5 exactly. Likewise with how normality is described by it's proximity to the mean, it's possible for a non-normal distribution to fulfill that. That's sort of seen with the fact that it remains discrete even as n increases which does effect the results. Also due to using the Monte Carlo variation the seeds will change the results.
+
+## What happened when I used a different seed?
+
+With this seed we do see it become normal at n = 20, though only barely and it does not manage to maintain that. Only by n = 50 does it stabilize and become normal consistently with supports the conclusion we got earlier.
+
+```{r}
+sample_sizes <- c(1, 2, 3, 5, 10, 20, 30, 40, 50, 60, 100)
+results <- data.frame()
+
+normal_quartiles <- qnorm(c(0.25, 0.75))
+
+for (n in sample_sizes) {
+  set.seed(0176)
+  means <- replicate(
+    B,
+    mean(sample(1:6, size = n, replace = TRUE))
+  )
+  
+  # Get Q-Q point coordinates without drawing a plot
+  qq_points <- qqnorm(means, plot.it = FALSE)
+  
+  # Reconstruct the reference line drawn by qqline()
+  observed_quartiles <- as.numeric(
+    quantile(means, c(0.25, 0.75))
+  )
+  
+  slope <- diff(observed_quartiles) / diff(normal_quartiles)
+  intercept <- observed_quartiles[1] -
+    slope * normal_quartiles[1]
+  
+  # Measure vertical departures from the line
+  line_values <- intercept + slope * qq_points$x
+  differences <- qq_points$y - line_values
+  
+  qq_rmse <- sqrt(mean(differences^2))
+  normalized_qq_rmse <- qq_rmse / slope
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n = n,
+      simulated_mean = mean(means),
+      simulated_SE = sd(means),
+      theoretical_SE = sqrt(35 / 12) / sqrt(n),
+      QQ_RMSE = qq_rmse,
+      normalized_QQ_RMSE = normalized_qq_rmse
+    )
+  )
+  
+  if (n %in% c(1, 2, 3, 5, 10, 30, 40, 50, 60, 100)) {
+    hist(
+      means,
+      breaks = 40,
+      probability = TRUE,
+      main = paste("Sample means: n =", n),
+      xlab = "Sample mean",
+      ylab = "Density"
+    )
+    
+    curve(
+      dnorm(x, mean = 3.5, sd = sqrt(35 / 12) / sqrt(n)),
+      add = TRUE,
+      col = "red",
+      lwd = 2
+    )
+    
+    qqnorm(means, main = paste("Normal Q-Q plot: n =", n))
+    qqline(means, col = "red")
+  }
+}
+
+knitr::kable(results, digits = 4)
+```
+
+ASSISTANT
+
+[Earlier assistant reply unavailable in the accessible conversation history.]
+
+========================================================================
+EXCHANGE 41
+========================================================================
+
+USER
+
+Actually, here is the R file for the die analysis. Create a template using this for me to use for the other distributions. DO NOT FILL IN OR MAKE ASSUMPTIONS FOR ME, instead just replace given information such as the new mean or any other value given within the Project Guideline
+
+[Attachments: attachments/die(1).qmd]
+
+ASSISTANT
+
+Created templates from your uploaded file, preserving its headings and simulation settings. Your analysis answers are blank; only assigned population details, theoretical values, and matching R code were updated.
+
+- [exponential-template.qmd](sandbox:/workspace/scratch/22198ebff926/distribution_templates/exponential-template.qmd)
+- [binomial-small-template.qmd](sandbox:/workspace/scratch/22198ebff926/distribution_templates/binomial-small-template.qmd)
+- [cauchy-template.qmd](sandbox:/workspace/scratch/22198ebff926/distribution_templates/cauchy-template.qmd)
+
+Download them into your RStudio project folder. Saving persistent copies failed, so keep the downloaded files.
+
+========================================================================
+EXCHANGE 42
+========================================================================
+
+USER
+
+Is this all the ones I am meant to do? The updated list is present here. If this changes anything done in die.qmd let me know
+
+[Attachments: attachments/clt_project_1_student_guidance(1).qmd]
+
+ASSISTANT
+
+**Yes—your normal and die analyses plus the three templates cover all five required populations.** The updated guidance lists: [Source: attachments/clt_project_1_student_guidance(1).qmd]
+
+| Required population | Assigned parameters |
+|---|---|
+| Standard normal | Mean \(0\), standard deviation \(1\) |
+| Six-sided die | Outcomes \(1–6\), equally likely |
+| Exponential | Rate \(1\) |
+| Small binomial | **5 trials**, success probability \(0.10\) |
+| Cauchy | Location \(0\), scale \(1\) |
+
+The three processes labelled **extra credit** are optional. Continuous uniform, Poisson, and large binomial are crossed out.
+
+This guidance is identical to the earlier copy, so it introduces **no new requirements for `die.qmd`. Your die simulation, theoretical mean, standard deviation, and SE formula are correct.
+
+Your uploaded die file still contains these factual errors to correct:
+
+- **Original population:** it is discrete uniform, not bell-shaped. The CLT concerns the sampling distribution of sample means; individual rolls remain uniformly distributed.
+- **Mean interval:** the acceptable range is **above 3.49 and below 3.51**. A tolerance of \(0.01\) is an absolute difference, not 1%.
+- **Normalized RMSE:** it measures departures across **all Q–Q points**, not only the tails. \(0.05\) describes the root mean square gap, not the arithmetic average gap.
+- **Sample sizes:** add **60** to your written list. Remove the claim about **\(n=4\)** unless you actually investigate it—your uploaded code does not.
+
+For the complete project, the guidance also requires a **final executive summary and comparison table**, plus a **separate AI prompt log**.
+
+========================================================================
+EXCHANGE 43
+========================================================================
+
+USER
+
+I'm sorry the download is gone, can you retry making the templates for the other methods? This is as simple as replacing the formulas and removing anything which is specific to the die population. If it would be the same then leave it the same. Remember, do not make assumptions or do answers for me. To help out, I also added in the one using the normal population so you can see what I have the same between the two
+
+[Attachments: attachments/die(2).qmd, attachments/normal.qmd]
+
+ASSISTANT
+
+[Download clt-distribution-templates.zip](sandbox:/workspace/scratch/22198ebff926/clt-distribution-templates.zip)
+
+Unzip it into your RStudio project folder. It contains:
+
+- `exponential.qmd`
+- `binomial-small.qmd`
+- `cauchy.qmd`
+
+I preserved your shared wording, settings, and thresholds, updated the population formulas and code, and left population-specific predictions, observations, and conclusions blank. Cauchy uses `NA` for theoretical SE because it is undefined.
+
+========================================================================
+EXCHANGE 44
+========================================================================
+
+USER
+
+You did it right for the exponential analysis but not for the other ones, please redo the templates. Also make sure I am not missing anything from the exponential analysis:
+
+---
+title: "Exponential Analysis"
+format: html
+---
+
+## What population am I sampling from?
+
+### Population description
+
+Exponential, with rate $\lambda = 1$. The given characteristic is strong right skew.
+
+### Theoretical mean and standard deviation
+
+The theoretical mean is $\mu = 1 = 1/\lambda$, and the standard deviation is $\sigma = 1 = 1/\lambda$.
+
+### CLT assumptions
+
+We are assuming that the observations with a sample are independent and identically distributed. There should be a finite variance of $1$, a mean of $1$, and a standard deviation of $1$.
+
+The original plot, as exponential populations tend to be, is skewed right. But the idea is that because they are identically distributed and have the same mean and standard deviation that the 10,000 means gathered from a sample of n will form a normal distribution.
+
+```{r}
+seed <- 9686
+B <- 10000
+set.seed(seed)
+
+population_sample <- rexp(B, rate = 1)
+
+hist(
+  population_sample,
+  breaks = 40,
+  probability = TRUE,
+  main = "Original population: Exponential, rate = 1",
+  xlab = "Individual observation"
+)
+
+curve(dexp(x, rate = 1), add = TRUE, col = "red", lwd = 2)
+```
+
+## What did I expect before running the simulation?
+
+My expectation is for the simulation to become normal by around n = 30, as with the increases in n the majority should shift towards the middle and create a normal distribution. I don't see the Q-Q plot being a major choke point as much as the means will be.
+
+## Which sample sizes did I investigate, and why?
+
+### Sample sizes
+
+I investigated n = 1, 2, 3, 5, 10, 20, 30, 50, and 100.
+
+We are starting from the lowest possible starting size, which is 1, and seeing how major changes impact it. The gap from 1 to 2 should be more impactful than the gap from 100 to 101, so we start with small increases and then towards the end do bigger ones. 125, 150, and 200 were necessary as even as high as 100 it did not become normal.
+
+### Number of repetitions
+
+I used B = 10,000 repetitions for each sample size.
+
+B is used to represent the amount of repetitions of the Monte Carlo Simulations. 10,000 was chosen not only because it was the example used but also because it's a large number which allows for many means to be represented.
+
+## How did I define “approximately normal”?
+
+When looking at the histogram, an average mean (the mean of the means in the histogram) which differs from the expected mean (1) by less 0.01 can be considered normal. While it's not the most precise, I am hoping that if, when converted to a percent (1%) it cannot be represented without using fractions then that means it will be close enough. While this mainly accounts for the center, the normalized RMSE accounts for the tails. Since the tails make up a minority of the data, deviation less than 0.05 can still be considered normal as while it does deviate a fair amount, at this level of deviation the theoretical max any point can deviate is by 5. While that is a lot, it is extremely uncommon as that would mean each other gap has a deviation of 0 units. An average gap of 0.05 is acceptable as it's half of a tenth.
+
+## When was the sampling distribution approximately normal?
+
+n = 125
+
+My estimation was substantially off as it took over triple the n size for it to become normal, as the normalized RMSE would not be within acceptable range.
+
+## Why did I choose that value?
+
+### Simulation code and results
+
+```{r}
+sample_sizes <- c(1, 2, 3, 5, 10, 20, 30, 50, 100, 125, 150, 200)
+results <- data.frame()
+
+normal_quartiles <- qnorm(c(0.25, 0.75))
+
+for (n in sample_sizes) {
+  set.seed(seed)
+  means <- replicate(
+    B,
+    mean(rexp(n, rate = 1))
+  )
+  
+  # Get Q-Q point coordinates without drawing a plot
+  qq_points <- qqnorm(means, plot.it = FALSE)
+  
+  # Reconstruct the reference line drawn by qqline()
+  observed_quartiles <- as.numeric(
+    quantile(means, c(0.25, 0.75))
+  )
+  
+  slope <- diff(observed_quartiles) / diff(normal_quartiles)
+  intercept <- observed_quartiles[1] -
+    slope * normal_quartiles[1]
+  
+  # Measure vertical departures from the line
+  line_values <- intercept + slope * qq_points$x
+  differences <- qq_points$y - line_values
+  
+  qq_rmse <- sqrt(mean(differences^2))
+  normalized_qq_rmse <- qq_rmse / slope
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n = n,
+      simulated_mean = mean(means),
+      simulated_SE = sd(means),
+      theoretical_SE = 1 / sqrt(n),
+      QQ_RMSE = qq_rmse,
+      normalized_QQ_RMSE = normalized_qq_rmse
+    )
+  )
+  
+  if (n %in% c(1, 2, 3, 5, 10, 20, 30, 50, 100, 125, 150, 200)) {
+    hist(
+      means,
+      breaks = 40,
+      probability = TRUE,
+      main = paste("Sample means: n =", n),
+      xlab = "Sample mean",
+      ylab = "Density"
+    )
+    
+    curve(
+      dnorm(x, mean = 1, sd = 1 / sqrt(n)),
+      add = TRUE,
+      col = "red",
+      lwd = 2
+    )
+    
+    qqnorm(means, main = paste("Normal Q-Q plot: n =", n))
+    qqline(means, col = "red")
+  }
+}
+
+knitr::kable(results, digits = 4)
+```
+
+### Histogram evidence
+
+The histogram itself, while it did take a while to fully shift over, did become sufficiently normal rather soon. In fact, even as low as n = 1 it was within 0.008 of the mean which is acceptable. This does prove that using the mean for checking for normality has substantial flaws, as the line to outline a normal distribution does not follow the histogram closely, but it also shows the importance of the Q-Q plot's RMSE as another means to determine normality. Comparing the histograms visually, it's clear to see that at 100 it's still leaning to the left but once it reaches 125 it is hard to notice any leaning.
+
+### Q-Q plot evidence
+
+The Q-Q plot is the clearest case demonstrating the issue with the exponential population. The tails of the line curve away from the expected value substantially which causes high root mean standard errors, to the point where even with the normal answer it's fairly noticeable. However it's also undeniable to say that at n = 125 it's substantially better than earlier values of n in corresponding with the line.
+
+### Numerical evidence
+
+Keeping in mind that the mean must be within a 0.01 tolerance of 1.00, the population did a great job of that. However it was clearly not normally distributed which can be seen through the Q-Q plot's RMSE. The standard error was well within what was expected to, making the RMSE the main check for normality.
+
+### Justification for my selected sample size
+
+n = 125 is the best choice for when it becomes normal as only then does it not only visually look normal in the histogram, but also numerical becomes normal due to finally having a Q-Q RMSE within the bounds of normality.
+
+## What surprised me, and what limitations did I observe?
+
+### Surprises
+
+I was definitely surprised by how long it took for it to reach normality, as I didn't expect it to take such a large sample size for it to shift over. In retrospect my earlier interpretations were definitely naive, as I hadn't considered that the mean would be so close to 1 due to the way exponential populations work, with the few high ones compensating for the many small values.
+
+### Limitations
+
+There is some variation seen, mainly in the amount of n values chosen (as there could always be more) and the variation in simulations. Likewise with how normality is described by it's proximity to the mean, it's possible for a non-normal distribution to fulfill that. Also due to using the Monte Carlo variation the seeds will change the results. Another big limitation was the way means by which we are determining normality, as only the Q-Q plot's normalized RMSE kept it in check. A potential solution would be to use the median and it's proximity to the mean, however that would require a whole new experiment. It is definitely an improvement which could be implemented though.
+
+## What happened when I used a different seed?
+
+The same trend is followed with the new seed, as it too only achieved normality at n = 125 due to the QQ normalized RMSE becoming acceptable only then. This further reinforces the answer achieved earlier as it got the same results.
+
+```{r}
+sample_sizes <- c(1, 2, 3, 5, 10, 20, 30, 50, 100, 125, 150, 200)
+results <- data.frame()
+
+normal_quartiles <- qnorm(c(0.25, 0.75))
+
+for (n in sample_sizes) {
+  set.seed(0176)
+  means <- replicate(
+    B,
+    mean(rexp(n, rate = 1))
+  )
+  
+  # Get Q-Q point coordinates without drawing a plot
+  qq_points <- qqnorm(means, plot.it = FALSE)
+  
+  # Reconstruct the reference line drawn by qqline()
+  observed_quartiles <- as.numeric(
+    quantile(means, c(0.25, 0.75))
+  )
+  
+  slope <- diff(observed_quartiles) / diff(normal_quartiles)
+  intercept <- observed_quartiles[1] -
+    slope * normal_quartiles[1]
+  
+  # Measure vertical departures from the line
+  line_values <- intercept + slope * qq_points$x
+  differences <- qq_points$y - line_values
+  
+  qq_rmse <- sqrt(mean(differences^2))
+  normalized_qq_rmse <- qq_rmse / slope
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n = n,
+      simulated_mean = mean(means),
+      simulated_SE = sd(means),
+      theoretical_SE = 1 / sqrt(n),
+      QQ_RMSE = qq_rmse,
+      normalized_QQ_RMSE = normalized_qq_rmse
+    )
+  )
+  
+  if (n %in% c(1, 2, 3, 5, 10, 20, 30, 50, 100, 125, 150, 200)) {
+    hist(
+      means,
+      breaks = 40,
+      probability = TRUE,
+      main = paste("Sample means: n =", n),
+      xlab = "Sample mean",
+      ylab = "Density"
+    )
+    
+    curve(
+      dnorm(x, mean = 1, sd = 1 / sqrt(n)),
+      add = TRUE,
+      col = "red",
+      lwd = 2
+    )
+    
+    qqnorm(means, main = paste("Normal Q-Q plot: n =", n))
+    qqline(means, col = "red")
+  }
+}
+
+knitr::kable(results, digits = 4)
+```
+
+[Attachments: attachments/image(20261012-085405).png]
+
+ASSISTANT
+
+I rebuilt the small binomial and Cauchy templates from the exponential structure. Predictions, observations, and conclusions remain blank. Your thresholds are preserved, with the RMSE explanation corrected.
+
+[clt-distribution-templates.zip](sandbox:/workspace/scratch/22198ebff926/clt-distribution-templates.zip)
+
+The archive includes the unchanged exponential starter and the revised templates. Cauchy has no theoretical mean or SE, so those comparisons cannot be filled with its location and scale.
+
+**Your exponential analysis covers the required sections.** These factual corrections remain:
+
+- **CLT explanation:** Increasing \(n\) makes the sampling distribution approximately normal under the stated assumptions. \(B=10{,}000\) helps estimate that distribution; it does not itself make it normal.
+- **Sample-size list:** Add **125, 150, and 200** to your written list so it matches the code.
+- **Normality criterion:** Proximity to the mean checks centering, not normal shape. State that your mean criterion **and** normalized Q–Q RMSE criterion must both pass.
+- **RMSE explanation:** It measures departures across **all Q–Q points**, including the tails. It is a **root mean square gap**, not an ordinary average gap. Your bound of 5 at RMSE \(0.05\), with 10,000 points, is an upper bound; it does not establish how likely a large gap is. Also replace “root mean standard errors” with “root mean square errors.”
+- **Selected size:** Describe \(125\) as the **smallest tested sample size meeting your criteria**, rather than an established exact minimum. You have not tested sizes 101–124.
+
+Your proposed median comparison would not require another simulation—you can calculate `median(means)` from existing samples. Agreement between mean and median also does not establish normality.
+
+The attached image shows the report’s opening, so I cannot independently verify the \(n=125\) results, SE comparisons, or plot descriptions from it.
+
+========================================================================
+EXCHANGE 45
+========================================================================
+
+USER
+
+It still has the same error of showing up like this
+
+[Attachments: attachments/image(20261012-095819).png]
+
+ASSISTANT
+
+The screenshot shows the document’s source text. In **RStudio**, click **Visual** beside **Source** above the editor to display formatted headings and formulas. [Source: https://quarto.org/docs/visual-editor/]
+
+I’ve added `editor: visual` so the updated templates open in Visual mode by default. [Source: https://quarto.org/docs/get-started/hello/rstudio.html]
+
+[clt-distribution-templates.zip](sandbox:/workspace/scratch/22198ebff926/clt-distribution-templates.zip)
+
+Click **Render** when you want the finished HTML report. [Source: https://quarto.org/docs/get-started/hello/rstudio.html]
+
+========================================================================
+EXCHANGE 46
+========================================================================
+
+USER
+
+The share button doesn't work for this conversation. Could you convert this into some .txt or .zip file for me to submit?
+
+[The response delivering this export is outside the transcript.]
+
+END OF AVAILABLE CONVERSATION TRANSCRIPT
